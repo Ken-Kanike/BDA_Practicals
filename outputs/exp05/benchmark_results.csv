@@ -1,0 +1,4 @@
+Strategy,Execution_Time_ms,Speedup
+Raw CSV scan,2646.39,1.0
+Partitioned Parquet,706.29,3.75
+Cached Spark SQL,312.85,8.46

@@ -1,0 +1,97 @@
+Mode,Location,Reason,Incident_Count,Avg_Delay_Mins,Total_Impact_Hours
+Bus,Brooklyn,Heavy Traffic,4140,11.73,14556.27
+Bus,Queens,Heavy Traffic,3626,11.96,12996.82
+Bus,Manhattan,Heavy Traffic,3694,11.48,12127.63
+Bus,Brooklyn,Mechanical Problem,2112,12.9,8086.45
+Bus,Manhattan,Mechanical Problem,1891,12.9,7277.47
+Bus,Queens,Mechanical Problem,1901,12.97,7223.19
+Bus,Brooklyn,Late Return From Route,1670,12.33,6031.57
+Bus,Manhattan,Late Return From Route,1597,12.61,5750.05
+Bus,Queens,Late Return From Route,1554,12.31,5638.02
+Bus,Bronx,Heavy Traffic,1656,11.71,5579.61
+Bus,Brooklyn,Road Construction,1533,11.45,5291.69
+Bus,Brooklyn,Accident,1293,13.35,5194.34
+Bus,Brooklyn,Weather Conditions,1487,11.23,4932.12
+Bus,Manhattan,Road Construction,1320,11.97,4615.79
+Bus,Queens,Accident,1167,13.42,4602.86
+Bus,Manhattan,Accident,1157,13.5,4505.4
+Bus,Queens,Road Construction,1291,11.39,4430.08
+Bus,Manhattan,Weather Conditions,1260,11.17,4324.8
+Bus,Queens,Weather Conditions,1266,11.2,4198.23
+Bus,Brooklyn,Driver Shortage,1179,11.6,4009.89
+Bus,Queens,Driver Shortage,1052,12.37,3774.16
+Bus,Manhattan,Driver Shortage,971,12.27,3667.47
+Bus,Staten Island,Heavy Traffic,1061,11.36,3587.07
+Bus,Brooklyn,Other,1085,10.81,3479.45
+Bus,Bronx,Mechanical Problem,860,13.07,3411.18
+Bus,Queens,Other,1026,10.96,3320.35
+Bus,Manhattan,Other,1001,10.75,3113.58
+Bus,Bronx,Late Return From Route,701,12.79,2591.36
+Bus,Bronx,Accident,535,13.33,2307.4
+Bus,Staten Island,Mechanical Problem,569,13.36,2261.29
+Bus,Bronx,Road Construction,571,11.67,2000.6
+Bus,Bronx,Weather Conditions,631,10.66,1890.41
+Bus,Bronx,Other,492,11.35,1743.26
+Bus,Staten Island,Late Return From Route,445,11.85,1651.09
+Bus,Bronx,Driver Shortage,484,11.58,1636.85
+Bus,Staten Island,Accident,348,13.97,1410.46
+Bus,Staten Island,Weather Conditions,381,11.91,1378.52
+Bus,Staten Island,Road Construction,376,11.61,1250.98
+Bus,Staten Island,Driver Shortage,314,11.81,1094.82
+Bus,Staten Island,Other,303,11.17,985.54
+Train,East of Hudson,Signal Problem,1812,8.79,37009.68
+Train,New Haven,Signal Problem,1753,8.91,36543.33
+Train,Harlem,Signal Problem,1505,9.02,31804.73
+Train,Hudson Line,Signal Problem,1503,8.98,31684.63
+Train,East of Hudson,Mechanical Failure,1584,8.5,31549.33
+Train,New Haven,Mechanical Failure,1569,8.28,30295.54
+Train,Harlem,Mechanical Failure,1402,8.15,26865.27
+Train,East of Hudson,Track Work,1364,7.86,25416.2
+Train,Pascack Valley,Signal Problem,1173,9.14,25306.51
+Train,New Haven,Track Work,1346,7.9,25143.57
+Train,Hudson Line,Mechanical Failure,1352,7.98,25132.27
+Train,Bergen County,Signal Problem,1115,9.02,23682.3
+Train,Port Jervis,Signal Problem,1130,8.88,23465.34
+Train,Harlem,Track Work,1139,8.13,21681.1
+Train,Hudson Line,Track Work,1119,7.84,20512.24
+Train,Bergen County,Mechanical Failure,1022,8.23,19621.2
+Train,Pascack Valley,Mechanical Failure,1025,8.23,19424.56
+Train,Port Jervis,Mechanical Failure,1025,8.09,19221.61
+Train,East of Hudson,Congestion,1048,7.71,18970.71
+Train,New Haven,Congestion,1056,7.55,18546.78
+Train,East of Hudson,Weather Conditions,1041,7.5,18378.75
+Train,New Haven,Weather Conditions,1008,7.58,17831.33
+Train,Pascack Valley,Track Work,927,8.08,17573.77
+Train,Harlem,Congestion,937,7.43,16343.4
+Train,Bergen County,Track Work,839,7.93,15651.65
+Train,Hudson Line,Congestion,898,7.36,15570.88
+Train,Port Jervis,Track Work,847,7.89,15552.32
+Train,Hudson Line,Weather Conditions,894,7.44,15543.59
+Train,Harlem,Weather Conditions,834,7.36,14545.36
+Train,New Haven,Overhead Line Issue,722,8.63,14503.54
+Train,East of Hudson,Overhead Line Issue,723,8.47,14362.68
+Train,Harlem,Overhead Line Issue,628,8.63,12838.24
+Train,Pascack Valley,Congestion,711,7.67,12449.84
+Train,Port Jervis,Congestion,689,7.7,12444.49
+Train,East of Hudson,Door Fault,708,7.46,12273.44
+Train,Port Jervis,Weather Conditions,719,7.31,12253.59
+Train,Pascack Valley,Weather Conditions,719,7.2,12131.49
+Train,Bergen County,Weather Conditions,694,7.29,11858.42
+Train,Bergen County,Congestion,678,7.48,11803.58
+Train,New Haven,Door Fault,656,7.66,11802.25
+Train,East of Hudson,Other,718,6.94,11795.09
+Train,Hudson Line,Overhead Line Issue,568,8.6,11423.69
+Train,New Haven,Other,618,7.14,10395.88
+Train,Harlem,Door Fault,554,7.82,10110.3
+Train,Hudson Line,Door Fault,552,7.46,9751.44
+Train,Port Jervis,Overhead Line Issue,459,8.64,9267.31
+Train,Harlem,Other,587,6.62,9242.86
+Train,Pascack Valley,Overhead Line Issue,461,8.45,9090.37
+Train,Bergen County,Overhead Line Issue,458,8.37,9012.24
+Train,Hudson Line,Other,504,6.87,8113.14
+Train,Pascack Valley,Door Fault,473,7.4,7995.9
+Train,Port Jervis,Door Fault,430,7.76,7758.26
+Train,Bergen County,Door Fault,427,7.3,7319.9
+Train,Bergen County,Other,433,7.05,7240.16
+Train,Port Jervis,Other,425,7.07,7117.98
+Train,Pascack Valley,Other,419,7.17,6965.04

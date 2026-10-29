@@ -1,0 +1,88 @@
+EXPERIMENT 5 - BATCH ANALYTICS WITH SPARK SQL
+==============================================================================
+Generated : 2026-10-29T21:31:53
+Unified view: 100,000 records (Bus + Train)
+
+QUERY 1 - HOURLY PEAK USAGE (top 10 rows)
+------------------------------------------------------------------------------
+Mode  Hour          TimeOfDayBand  Total_Trips_Delayed  Avg_Delay_Mins  Max_Delay_Mins  Total_Passenger_Delay_Hours
+ Bus     0 Night Off-Peak (20-05)                  756           11.42           69.83                      2684.72
+ Bus     1 Night Off-Peak (20-05)                  744           11.57           69.66                      2608.90
+ Bus     2 Night Off-Peak (20-05)                  765           11.33           78.69                      2663.99
+ Bus     3 Night Off-Peak (20-05)                  730           11.29           59.31                      2459.66
+ Bus     4 Night Off-Peak (20-05)                  762           11.35           74.29                      2704.05
+ Bus     5 Night Off-Peak (20-05)                  797           12.39           63.67                      2831.09
+ Bus     6   Morning Rush (06-09)                 3743           12.29           78.34                     13491.59
+ Bus     7   Morning Rush (06-09)                 3846           12.25           96.87                     13950.02
+ Bus     8   Morning Rush (06-09)                 3775           12.52           97.37                     13755.00
+ Bus     9   Morning Rush (06-09)                 3677           12.18           78.68                     13417.27
+
+QUERY 2 - SPATIAL & REASON BOTTLENECKS (top 10 rows)
+------------------------------------------------------------------------------
+Mode  Location                 Reason  Incident_Count  Avg_Delay_Mins  Total_Impact_Hours
+ Bus  Brooklyn          Heavy Traffic            4140           11.73            14556.27
+ Bus    Queens          Heavy Traffic            3626           11.96            12996.82
+ Bus Manhattan          Heavy Traffic            3694           11.48            12127.63
+ Bus  Brooklyn     Mechanical Problem            2112           12.90             8086.45
+ Bus Manhattan     Mechanical Problem            1891           12.90             7277.47
+ Bus    Queens     Mechanical Problem            1901           12.97             7223.19
+ Bus  Brooklyn Late Return From Route            1670           12.33             6031.57
+ Bus Manhattan Late Return From Route            1597           12.61             5750.05
+ Bus    Queens Late Return From Route            1554           12.31             5638.02
+ Bus     Bronx          Heavy Traffic            1656           11.71             5579.61
+
+QUERY 3 - WINDOW FUNCTIONS (top 10 rows)
+------------------------------------------------------------------------------
+      Date Mode  Location  Daily_Avg_Delay  Daily_Incidents  Rolling_7Day_Avg_Delay  Day_Over_Day_Delay_Delta  Severity_Rank_In_Location  Delay_Quartile  Year  Month
+2024-05-01  Bus     Bronx            27.32                5                   14.92                     14.55                          1               4  2024      5
+2024-03-28  Bus     Bronx            26.76                2                   14.45                     11.28                          2               4  2024      3
+2023-07-21  Bus     Bronx            23.64                6                   13.52                      9.63                          3               4  2023      7
+2023-08-25  Bus  Brooklyn            20.28               10                   12.81                      7.70                          1               4  2023      8
+2024-07-24  Bus  Brooklyn            20.05               14                   13.30                      6.03                          2               4  2024      7
+2023-01-11  Bus  Brooklyn            19.40               16                   12.90                      6.39                          3               4  2023      1
+2023-08-09  Bus Manhattan            21.91               13                   13.72                     10.61                          1               4  2023      8
+2024-09-05  Bus Manhattan            21.72               19                   13.04                      9.27                          2               4  2024      9
+2023-04-13  Bus Manhattan            20.62               20                   12.68                      8.74                          3               4  2023      4
+2024-03-25  Bus    Queens            20.80               21                   13.84                      9.20                          1               4  2024      3
+
+CATALYST EXECUTION PLAN (physical plan excerpt)
+------------------------------------------------------------------------------
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   TableCacheQueryStage 0
+   +- InMemoryTableScan [Mode#60, Hour#91, TimeOfDayBand#145, Total_Trips_Delayed#746L, Avg_Delay_Mins#747, Max_Delay_Mins#748, Total_Passenger_Delay_Hours#749]
+         +- InMemoryRelation [Mode#60, Hour#91, TimeOfDayBand#145, Total_Trips_Delayed#746L, Avg_Delay_Mins#747, Max_Delay_Mins#748, Total_Passenger_Delay_Hours#749], StorageLevel(disk, memory, deserialized, 1 replicas)
+               +- AdaptiveSparkPlan isFinalPlan=false
+                  +- Sort [Mode#60 ASC NULLS FIRST, Hour#91 ASC NULLS FIRST], true, 0
+                     +- Exchange rangepartitioning(Mode#60 ASC NULLS FIRST, Hour#91 ASC NULLS FIRST, 8), ENSURE_REQUIREMENTS, [plan_id=169]
+                        +- HashAggregate(keys=[Mode#60, Hour#91, TimeOfDayBand#145], functions=[count(1), avg(Delay_Minutes#22), max(Delay_Minutes#22), sum(Passenger_Delay_Impact_Hrs#161)], output=[Mode#60, Hour#91, TimeOfDayBand#145, Total_Trips_Delayed#746L, Avg_Delay_Mins#747, Max_Delay_Mins#748, Total_Passenger_Delay_Hours#749])
+                           +- Exchange hashpartitioning(Mode#60, Hour#91, TimeOfDayBand#145, 8), ENSURE_REQUIREMENTS, [plan_id=166]
+                              +- HashAggregate(keys=[Mode#60, Hour#91, TimeOfDayBand#145], functions=[partial_count(1), partial_avg(Delay_Minutes#22), partial_max(Delay_Minutes#22), partial_sum(Passenger_Delay_Impact_Hrs#161)], output=[Mode#60, Hour#91, TimeOfDayBand#145, count#961L, sum#962, count#963L, max#964, sum#965])
+                                 +- InMemoryTableScan [Mode#60, Hour#91, TimeOfDayBand#145, Delay_Minutes#22, Passenger_Delay_Impact_Hrs#161]
+                                       +- InMemoryRelation [Date#17, Mode#60, Location#70, Scheduled_Time#20, Hour#91, Month#103, Year#116, DayOfWeek#130, TimeOfDayBand#145, Reason#21, Delay_Minutes#22, Passengers#80, Passenger_Delay_Impact_Hrs#161], StorageLevel(disk, memory, deserialized, 1 replicas)
+                                             +- Union
+                                                :- *(1) Project [Date#17, Bus AS Mode#60, Location#70, Scheduled_Time#20, Hour#91, month(Date#17) AS Month#103, year(D
+
+BENCHMARK - Delay_Minutes > 15 filter
+------------------------------------------------------------------------------
+           Strategy  Execution_Time_ms  Speedup
+       Raw CSV scan            2646.39     1.00
+Partitioned Parquet             706.29     3.75
+   Cached Spark SQL             312.85     8.46
+Raw CSV size            : 5.45 MB
+Partitioned Parquet size: 1.60 MB
+Storage reduction       : 70.7%
+
+KEY ANALYTICAL FINDINGS
+------------------------------------------------------------------------------
+1. Bus rush-hour average delay stays within 12.18-12.52 minutes across the 06-09 and 16-19 peaks - steady rather than spiking.
+2. Largest bus bottleneck: Brooklyn / Heavy Traffic with 14,556.27 passenger-hours lost.
+3. Largest train bottleneck: East of Hudson / Signal Problem with 37,009.68 passenger-hours lost.
+4. Cached Spark SQL was 8.46x faster than the raw CSV scan.
+5. Partitioned Parquet was 3.75x vs raw CSV on this run.
+6. Parquet reduced the stored footprint by 70.7%.
+7. Staten Island showed the highest single-day bus average delay (57.23 min).
+
+CONCLUSION
+------------------------------------------------------------------------------
+Spark SQL successfully executed hourly, spatial and windowed analytics over 100,000 unified records. The physical plan confirms projection pushdown and partition-local partial aggregation before the shuffle. Caching delivered the largest query speedup, while partitioned Parquet delivered a large storage reduction and provides the optimized artifacts consumed by Experiment 6.

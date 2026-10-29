@@ -1,0 +1,27 @@
+{
+  "unified_rows": 100000,
+  "query1_rows": 48,
+  "query2_rows": 96,
+  "query3_rows": 36,
+  "benchmark_ms": {
+    "raw_csv": 2646.39,
+    "parquet": 706.29,
+    "cached": 312.85
+  },
+  "speedup_cached": 8.46,
+  "speedup_parquet": 3.75,
+  "csv_mb": 5.449,
+  "parquet_mb": 1.597,
+  "storage_reduction_pct": 70.68,
+  "bus_top_bottleneck": {
+    "location": "Brooklyn",
+    "reason": "Heavy Traffic",
+    "impact_hours": 14556.27
+  },
+  "train_top_bottleneck": {
+    "location": "East of Hudson",
+    "reason": "Signal Problem",
+    "impact_hours": 37009.68
+  },
+  "staten_island_max_daily_avg": 57.23
+}

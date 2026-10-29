@@ -10,6 +10,7 @@ from pyspark.sql.functions import (
     lit,
     month,
     round as spark_round,
+    to_date,
     to_timestamp,
     when,
     year,
@@ -47,9 +48,9 @@ def _prepared(df: DataFrame, mode: str, location_col: str, passenger_col: str) -
         .withColumn("Location", col(location_col))
         .withColumn("Passengers", col(passenger_col))
         .withColumn("Hour", hour(time_ts))
-        .withColumn("Month", month(col("Date")))
-        .withColumn("Year", year(col("Date")))
-        .withColumn("DayOfWeek", dayofweek(col("Date")))
+        .withColumn("Month", month(to_date(col("Date"))))
+        .withColumn("Year", year(to_date(col("Date"))))
+        .withColumn("DayOfWeek", dayofweek(to_date(col("Date"))))
         .withColumn(
             "TimeOfDayBand",
             when((col("Hour") >= 6) & (col("Hour") <= 9), "Morning Rush (06-09)")
