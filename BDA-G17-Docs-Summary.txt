@@ -1,0 +1,258 @@
+================================================================================
+COMPARATIVE STUDY OF TRANSPORT MODES: BIG DATA ANALYSIS OF BUS VS TRAIN DELAYS
+Group 17 - Consolidated Summary of Experiments 1-10
+Source docs: BDA-G17-EXP1.docx ... BDA-G17-EXP10.docx
+================================================================================
+
+PROJECT OVERVIEW
+--------------------------------------------------------------------------------
+Domain: Smart City transportation reliability.
+Goal: Build an end-to-end Big Data pipeline (ingestion, storage, processing,
+batch analytics, streaming, NoSQL, ML, dashboards) comparing Bus and Train
+delay behaviour.
+Data: 50,000 synthetic Bus records + 50,000 synthetic Train records (100,000
+total), covering two years. Bus fields include Route_ID, Borough, Reason,
+Delay_Minutes, Number_Of_Students_On_Bus; Train fields include Line, Reason,
+Delay_Minutes, Passengers_Onboard.
+Owner: Junaid Shaikh
+Stack: PySpark (local[*]), Spark SQL, Parquet, MongoDB, Spark Structured
+Streaming, Streamlit/Plotly, Matplotlib/Seaborn, scikit-learn.
+
+
+EXPERIMENT 1 - Domain Selection, Setup & Exploratory Data Analysis
+--------------------------------------------------------------------------------
+Objective: Set up the PySpark environment and profile the raw Bus and Train
+datasets.
+Work: Installed PySpark, loaded both CSVs, checked schemas, row/column counts,
+nulls, duplicates, and top-10 value counts; produced EDA charts and report.
+Key Results:
+- 50,000 Bus records (7 columns) and 50,000 Train records (6 columns).
+- Zero missing values in both datasets.
+- Top bus delay cause: Heavy Traffic (14,177 records).
+- Top train delay cause: Signal Problem (9,991 records).
+- Brooklyn had the highest bus delay volume; delays were evenly spread across
+  all seven train lines.
+- Average delay: Bus 12.03 min (median 10.1) vs Train 8.03 min (median 6.4);
+  both distributions right-skewed with long outlier tails (bus more so).
+Conclusion: Both datasets are clean and structurally ready for later stages.
+
+
+EXPERIMENT 2 - Project Proposal & Architecture Definition
+--------------------------------------------------------------------------------
+Objective: Define the problem domain, dataset allocation, team roles, and
+high-level system design.
+Work: Formalized the project proposal and an end-to-end layered architecture.
+Key Content:
+- Title: Comparative Study of Transport Modes - Big Data Analysis of Bus vs
+  Train Delays (Transportation / Smart City).
+- Problem: Bus and train delays differ by cause and mode; spreadsheet-scale
+  analysis cannot handle the volume/variety of delay records.
+- Objectives: ingest/store at scale, distributed cleaning and aggregation,
+  predictive modeling of delay duration, and interactive reliability dashboards.
+- Datasets: 50,000 records each, two-year window, tabular time-stamped logs
+  with categorical features and Delay_Minutes as the numeric target;
+  Delay_Severity for classification.
+- Architecture layers: Ingestion (Pandas/PySpark CSV load) -> Storage (Data Lake
+  raw + Warehouse/Parquet cleaned) -> Processing (Spark/Spark SQL) -> Machine
+  Learning (MLlib) -> Serving/Dashboard (historical + predictive).
+- Team roles assigned: Data Engineer, Data Scientist, Data Analyst, BI &
+  Visualization Engineer; version control via GitHub for reproducibility.
+Conclusion: Project scope, roles, data allocation, and architecture were fixed.
+
+
+EXPERIMENT 3 - MapReduce Processing on Unstructured Text Data
+--------------------------------------------------------------------------------
+Objective: Apply MapReduce concepts to the free-form Reason text of both
+datasets.
+Work: Extracted the Reason column into RDDs, repartitioned to 4 partitions,
+tokenized/lower-cased/stop-word filtered, mapped to (word, 1), reduced with
+reduceByKey(), and sorted by frequency. Also tag severity tiers by keyword and
+audited partition balance.
+Key Results:
+- Bus top keywords: heavy/traffic (14,177 each), mechanical/problem (7,333).
+- Train top keywords: signal/problem (9,991), mechanical/failure (8,979),
+  track/work (7,581), congestion (6,017).
+- Severity mix: Bus mostly Moderate (50.3%); Train mostly Severe + Critical
+  (66.1% combined).
+- Both RDDs split evenly into 4 x 12,500 records -> zero data skew.
+- "Weather Conditions" is a shared top-10 cause for both modes.
+Conclusion: MapReduce pipeline is balanced, efficient, and scale-ready; rail
+disruptions are less frequent but more severe than bus disruptions.
+
+
+EXPERIMENT 4 - Data Ingestion Pipeline & NoSQL Staging
+--------------------------------------------------------------------------------
+Objective: Build an ingestion pipeline into HDFS-style storage and MongoDB.
+Work: Wrote partitioned Parquet (Bus by Borough, Train by Line) into a local
+hdfs_staging/ layout; bulk-inserted records into MongoDB collections
+(transport_staging_db.bus_delays / train_delays); ran mongosh CRUD and
+validation queries; performed automated schema and parity checks.
+Key Results:
+- 50,000 Bus + 50,000 Train records staged in both layers (100% success).
+- Bus partitioned into 5 Borough directories; Train into 7 Line directories.
+- 1:1 parity between HDFS partition counts and MongoDB document counts.
+- No nulls, no duplicates; CRUD round-trip (insert, update, findOne) verified.
+- MongoDB schema flexibility confirmed (different fields per mode coexist).
+Conclusion: A clean, query-ready hybrid staging layer was delivered.
+
+
+EXPERIMENT 5 - Batch Analytics with Spark SQL
+--------------------------------------------------------------------------------
+Objective: Run large-scale Spark SQL analytics over the unified 100,000-record
+dataset and optimize query execution with partitioned Parquet.
+Work: Enriched both DataFrames with Hour, Month, Year, DayOfWeek, TimeOfDayBand,
+and Passenger_Delay_Impact_Hrs; unioned into the unified_transit_delays view.
+Ran peak-usage aggregation, spatial/reason bottleneck analysis, and window
+functions (7-day rolling average, LAG, DENSE_RANK, NTILE); inspected the
+Catalyst plan; benchmarked CSV vs Parquet vs cached execution.
+Key Results:
+- Bus average delay holds ~12.0-12.4 min through both rush peaks (no sharp
+  spike) per hourly query.
+- Brooklyn Heavy Traffic is the largest single bottleneck: 14,958
+  passenger-hours lost.
+- Benchmark (Delay_Minutes > 15 filter): raw CSV 641.5 ms, Parquet 666.9 ms
+  (0.96x), cached Spark SQL 107.0 ms (5.99x speedup).
+- Parquet cut storage from 4.98 MB to 1.12 MB (-77.5%).
+- Staten Island shows the most volatile single-day bus delays (up to 48.8 min).
+Conclusion: Catalyst performed partition-local pre-aggregation before shuffle;
+caching delivered ~6x speedup and Parquet delivered 77.5% disk savings.
+
+
+EXPERIMENT 6 - Batch Analytics Visualization & Reporting
+--------------------------------------------------------------------------------
+Objective: Turn Experiment 5 aggregates into visual insights and a synthesized
+report comparing Bus and Train reliability.
+Work: Read back the Parquet artifacts; built daily/rolling trend lines, monthly
+cumulative passenger-hour totals, day-of-week x hour heatmaps, location/line x
+reason cross-tabulations, a multimodal KPI dashboard, and
+batch_analytics_report.txt.
+Key Results (scorecard):
+- Bus: 50,000 trips, mean 12.03 min, SD 8.51, 180,136 passenger-hours lost,
+  15.41% severe (>20 min).
+- Train: 50,000 trips, mean 8.03 min, SD 6.40, 936,852 passenger-hours lost,
+  5.50% severe.
+- Combined: 100,000 trips, mean 10.03 min, 1,116,988 passenger-hours lost,
+  10.46% severe.
+- Trains lose >5x the passenger-hours of buses despite shorter average delays,
+  because of higher onboard capacity.
+- Signal Problem is the largest train bottleneck (peaks at 28,070 hrs on the
+  Harlem line); Congestion + Track Work cause >65% of rail passenger-hours.
+- Bus delays are proportionally more severe; weekday bus averages are very
+  stable (11.92-12.28 min).
+- Recommendations: dynamic transit signal priority, predictive IoT-based
+  maintenance, intelligent rail dispatching, and scaled Parquet architecture.
+Conclusion: Bus failures are frequent-but-recoverable congestion; train
+failures are rarer but high-impact signal/track incidents.
+
+
+EXPERIMENT 7 - Real-Time Streaming Data Pipeline
+--------------------------------------------------------------------------------
+Objective: Build a real-time event-streaming pipeline with sliding-window
+metrics and severe-delay alerting.
+Work: Simulated a Kafka producer writing newline-delimited JSON micro-batches
+(120-150 events each) into streaming_input/; consumed them with Spark Structured
+Streaming (schema parsing, enrichment, 2-minute watermark, 5-minute window with
+1-minute slide) into an in-memory sink; produced live micro-batches during
+execution and queried the sink with SQL.
+Key Results:
+- Micro-batch: 120 rows processed in 423 ms (283.7 rows/sec) - sub-second
+  latency, well within the 1-minute slide.
+- 10 corridors monitored; 1,460 severe-delay alerts (>15 min) triggered.
+- Train windows reached ~3,600 rolling passenger-hours lost vs <550 for Bus.
+- Bus and Train rolling delays converged to ~11.5-12.9 min around the same
+  window, suggesting a shared external factor.
+- Speed and delay are inversely correlated in real time; alert counts are
+  broadly balanced across corridors (135-180 each).
+Conclusion: A working live telemetry-to-micro-batch loop was demonstrated and
+is ready to feed a real-time dashboard.
+
+
+EXPERIMENT 8 - Real-Time Operational Dashboard
+--------------------------------------------------------------------------------
+Objective: Build an interactive streaming dashboard with automated threshold
+alerting for severe delays.
+Work: Read live telemetry from Experiment 7's sink, derived passenger_hours_lost,
+classified events as NORMAL / WARNING (>=15 min) / CRITICAL (>=25 min) using
+vectorized np.where, and built a Streamlit/Plotly app (KPI cards, dual-axis
+rolling delay/speed chart, corridor burden chart, incident feed, severity donut,
+sidebar filters and 3-second auto-refresh). Also rendered static
+Matplotlib/Seaborn snapshots and alert diagnostics.
+Key Results:
+- 990 vehicles monitored (516 Bus, 474 Train).
+- System average delay 10.44 min; 12,585.20 cumulative passenger-hours lost;
+  mean speed 30.3 mph; 94.3% sensors OK.
+- Severity split: 69.1% Normal, 15.7% Warning, 15.3% Critical (~31% alerts).
+- A 34.8-min Harlem train delay cost 85.7 passenger-hours - nearly 8x another
+  incident at the same delay, due to higher onboard load.
+- Low speed is a strong leading indicator: high-impact points cluster below
+  20 mph; all points above 30 mph stay under 20 passenger-hours lost.
+- Alert burden spread evenly across corridors (Manhattan and Staten Island lead
+  only slightly).
+Conclusion: Low speed and high passenger load, not delay duration alone, drive
+the largest-impact incidents; the dashboard is the operational front end.
+
+
+EXPERIMENT 9 - NoSQL Data Lake Design & Querying
+--------------------------------------------------------------------------------
+Objective: Design, build, and benchmark a multi-model NoSQL data lake and
+quantify indexing speedups.
+Work: Modeled 6,000 documents (3,000 Bus + 3,000 Train) into
+urban_smart_city_datalake.urban_transit_telemetry with embedded subdocuments
+(metrics, telemetry_iot, incident_info) and synthetic GeoJSON coordinates; added
+a 4-document corridor_spatial_zones key-value collection. Created two compound
+indexes, one severity/speed compound index, and one 2dsphere geospatial index;
+benchmarked four query types over 10 iterations before and after indexing.
+Key Results (pre -> post index):
+- Q1 multi-criteria filter/sort (idx_mode_delay): 19.35 -> 1.31 ms (14.8x).
+- Q2 spatial aggregation pipeline (idx_loc_severity): 188.27 -> 16.37 ms (11.5x).
+- Q3 severity & speed range (idx_sev_speed): 9.28 -> 0.51 ms (18.2x).
+- Q4 geospatial bounding search (idx_geo_2dsphere): 41.24 -> 4.80 ms (8.6x).
+- Average speedup: 13.28x; every plan shifted from COLLSCAN to IXSCAN + FETCH.
+- Severity tiers (MINOR/MODERATE/SEVERE/CRITICAL) occupy non-overlapping delay
+  ranges; Brooklyn again leads passenger-hours lost; sensor health ~90%+ OK.
+Conclusion: A properly indexed NoSQL data lake supports sub-5ms multi-criteria
+and spatial queries at this scale.
+
+
+EXPERIMENT 10 - Machine Learning & Final Smart City Showcase
+--------------------------------------------------------------------------------
+Objective: Predict delay duration and severe-congestion risk, and integrate all
+prior layers into one showcase dashboard.
+Work: Re-ingested all 100,000 records and engineered features (Hour, Month,
+DayOfWeek, IsWeekend, IsRushHour, one-hot Mode/Location/Reason). Trained three
+regression models (Random Forest, GBT, Linear Regression baseline) and a Random
+Forest classifier on a 75/25 stratified split; rendered evaluation curves,
+architecture diagram, and a Streamlit showcase with a live ML predictor tab.
+Key Results (regression):
+- Random Forest: RMSE 7.476, MAE 5.652, R2 0.060.
+- GBT: RMSE 7.468, MAE 5.643, R2 0.062.
+- Linear Regression: RMSE 7.460, MAE 5.634, R2 0.064.
+Key Results (classification, Severe >= 15 min; 21.0% positive rate):
+- Before fix: AUC 0.6257, accuracy 79.36%, Macro F1 0.0000, 0 predicted
+  positives (degenerate majority-class collapse).
+- After class_weight='balanced': AUC 0.6194, accuracy 57.69%, precision 0.2896,
+  recall 69.52%, Macro F1 0.4089, 12,631 predicted Severe cases.
+- Passenger count drives ~63% of regressor feature importance.
+- Two real bugs fixed: classifier class imbalance, and the live predictor tab
+  now calls the actual trained models instead of a hardcoded formula.
+- Low R2 (~0.06) is a genuine feature-set limitation, not an implementation bug;
+  next step is richer signals (live traffic/weather, route historical baselines).
+Conclusion: The full ten-experiment pipeline - ingestion, MapReduce, batch SQL,
+visualization, streaming, dashboards, indexed NoSQL, and ML - was integrated
+into a single master Smart City showcase.
+
+
+CROSS-CUTTING CONCLUSIONS
+--------------------------------------------------------------------------------
+1. Bus delays are frequent but individually recoverable (congestion-driven,
+   mostly Moderate); train delays are rarer but far higher impact per incident
+   (signal/track-driven, high onboard capacity).
+2. Brooklyn (bus) and the East of Hudson / New Haven lines (train) are the
+   priority corridors for intervention.
+3. Technical wins: 77.5% Parquet storage savings, ~6x cached SQL speedup,
+   13.28x average NoSQL indexing speedup, and sub-second streaming micro-batches.
+4. ML is honest but limited: classification is usable after class rebalancing;
+   regression needs richer features to improve beyond R2 ~0.06.
+================================================================================
+END OF SUMMARY
+================================================================================

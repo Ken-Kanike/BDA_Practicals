@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+
+# Generated datasets (recreate with: python common/data_gen.py)
+data/*.csv
+data/metadata.json
+
+# Spark / streaming runtime state
+outputs/**/hdfs_staging/
+outputs/**/streaming_input/
+outputs/**/checkpoint/
+outputs/**/checkpoints/
+outputs/**/*.parquet/
+outputs/**/spark-warehouse/
+outputs/**/derby.log
+outputs/**/metastore_db/
+
+# Large model binaries
+outputs/exp10/models/*.joblib
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.log
