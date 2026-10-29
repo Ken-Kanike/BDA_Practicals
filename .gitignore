@@ -5,7 +5,7 @@ __pycache__/
 venv/
 .env
 
-# Generated datasets (recreate with: python common/data_gen.py)
+# Generated datasets (recreate with: python -m common.data_gen)
 data/*.csv
 data/metadata.json
 
