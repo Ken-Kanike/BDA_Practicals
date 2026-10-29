@@ -1,0 +1,28 @@
+{
+  "bus_hdfs_records": 50000,
+  "train_hdfs_records": 50000,
+  "bus_mongo_documents": 50000,
+  "train_mongo_documents": 50000,
+  "bus_partitions": [
+    "Bronx",
+    "Brooklyn",
+    "Manhattan",
+    "Queens",
+    "Staten Island"
+  ],
+  "train_partitions": [
+    "Bergen County",
+    "East of Hudson",
+    "Harlem",
+    "Hudson Line",
+    "New Haven",
+    "Pascack Valley",
+    "Port Jervis"
+  ],
+  "bus_nulls": 0,
+  "train_nulls": 0,
+  "bus_duplicates": 0,
+  "train_duplicates": 0,
+  "crud_round_trip": true,
+  "mongo_real_server": true
+}

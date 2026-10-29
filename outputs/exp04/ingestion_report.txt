@@ -1,0 +1,64 @@
+EXPERIMENT 4 - DATA INGESTION PIPELINE & NOSQL STAGING
+==============================================================================
+Generated : 2026-10-29T21:28:57
+MongoDB   : real server (mongodb://127.0.0.1:27017/)
+
+HDFS-STYLE PARTITIONED STORAGE
+------------------------------------------------------------------------------
+Bus path            : C:\Users\junai\Desktop\BDA_docx\outputs\exp04\hdfs_staging\bus_delays
+Bus partitions (5)  : Bronx, Brooklyn, Manhattan, Queens, Staten Island
+Bus records         : 50,000
+Train path          : C:\Users\junai\Desktop\BDA_docx\outputs\exp04\hdfs_staging\train_delays
+Train partitions (7): Bergen County, East of Hudson, Harlem, Hudson Line, New Haven, Pascack Valley, Port Jervis
+Train records       : 50,000
+
+MONGODB STAGING (transport_staging_db)
+------------------------------------------------------------------------------
+bus_delays documents   : 50,000
+train_delays documents : 50,000
+CRUD round-trip (B99)  : PASSED
+Null values (bus)      : 0
+Null values (train)    : 0
+Duplicate rows (bus)   : 0
+Duplicate rows (train) : 0
+
+HDFS <-> MONGODB PARITY
+------------------------------------------------------------------------------
+Bus   : 50,000 == 50,000 -> 1:1 MATCH
+Train : 50,000 == 50,000 -> 1:1 MATCH
+
+MONGODB AGGREGATION - BUS BY REASON
+------------------------------------------------------------------------------
+                Reason  count  avg_delay
+              Accident   4500     13.453
+    Mechanical Problem   7333     12.975
+Late Return From Route   5967     12.416
+       Driver Shortage   4000     11.979
+         Heavy Traffic  14177     11.695
+     Road Construction   5091     11.607
+    Weather Conditions   5025     11.188
+                 Other   3907     10.931
+
+MONGODB AGGREGATION - TRAIN BY LINE
+------------------------------------------------------------------------------
+          Line  count  avg_delay
+     New Haven   8728      8.080
+Pascack Valley   5908      8.071
+East of Hudson   8998      8.043
+        Harlem   7586      8.043
+   Port Jervis   5724      8.014
+ Bergen County   5666      7.988
+   Hudson Line   7390      7.953
+
+VALIDATION SUMMARY
+------------------------------------------------------------------------------
+Records staged        : YES
+Schema validation     : PASSED
+Required fields       : ALL PRESENT
+Null values           : NONE DETECTED
+Duplicates            : NONE DETECTED
+PIPELINE EXECUTION    : COMPLETE
+
+CONCLUSION
+------------------------------------------------------------------------------
+Both 50,000-record datasets were ingested into partitioned Parquet (bus by Borough, train by Line) and staged into MongoDB with verified 1:1 record parity, zero nulls, zero duplicates and a successful CRUD round-trip. The staging layer is query-ready for later experiments.

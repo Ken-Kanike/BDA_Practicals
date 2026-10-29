@@ -1,0 +1,9 @@
+Reason,count,avg_delay
+Accident,4500,13.453
+Mechanical Problem,7333,12.975
+Late Return From Route,5967,12.416
+Driver Shortage,4000,11.979
+Heavy Traffic,14177,11.695
+Road Construction,5091,11.607
+Weather Conditions,5025,11.188
+Other,3907,10.931
