@@ -1,0 +1,10 @@
+{
+  "batch_id": 1,
+  "num_input_rows": 240,
+  "input_rows_per_second": 20.05,
+  "processed_rows_per_second": 52.5,
+  "trigger_execution_ms": 4571,
+  "watermark": "2 minutes",
+  "window": "5-minute sliding, 1-minute slide",
+  "batches_seen": 2
+}
