@@ -106,16 +106,16 @@ Ran peak-usage aggregation, spatial/reason bottleneck analysis, and window
 functions (7-day rolling average, LAG, DENSE_RANK, NTILE); inspected the
 Catalyst plan; benchmarked CSV vs Parquet vs cached execution.
 Key Results:
-- Bus average delay holds ~12.0-12.4 min through both rush peaks (no sharp
-  spike) per hourly query.
-- Brooklyn Heavy Traffic is the largest single bottleneck: 14,958
-  passenger-hours lost.
-- Benchmark (Delay_Minutes > 15 filter): raw CSV 641.5 ms, Parquet 666.9 ms
-  (0.96x), cached Spark SQL 107.0 ms (5.99x speedup).
-- Parquet cut storage from 4.98 MB to 1.12 MB (-77.5%).
-- Staten Island shows the most volatile single-day bus delays (up to 48.8 min).
+- Bus rush-hour average delay stays within 12.18-12.52 min across the 06-09
+  and 16-19 peaks (steady rather than spiking).
+- Brooklyn Heavy Traffic is the largest single bus bottleneck: 14,556.27
+  passenger-hours lost; East of Hudson Signal Problem leads trains at 37,009.68.
+- Benchmark (Delay_Minutes > 15 filter): raw CSV 2,646.39 ms, Parquet 706.29 ms
+  (3.75x), cached Spark SQL 312.85 ms (8.46x speedup).
+- Parquet cut storage from 5.45 MB to 1.60 MB (-70.7%).
+- Staten Island shows the highest single-day bus average delay (57.23 min).
 Conclusion: Catalyst performed partition-local pre-aggregation before shuffle;
-caching delivered ~6x speedup and Parquet delivered 77.5% disk savings.
+caching delivered 8.46x speedup and Parquet delivered 70.7% disk savings.
 
 
 EXPERIMENT 6 - Batch Analytics Visualization & Reporting
@@ -127,18 +127,18 @@ cumulative passenger-hour totals, day-of-week x hour heatmaps, location/line x
 reason cross-tabulations, a multimodal KPI dashboard, and
 batch_analytics_report.txt.
 Key Results (scorecard):
-- Bus: 50,000 trips, mean 12.03 min, SD 8.51, 180,136 passenger-hours lost,
-  15.41% severe (>20 min).
-- Train: 50,000 trips, mean 8.03 min, SD 6.40, 936,852 passenger-hours lost,
-  5.50% severe.
-- Combined: 100,000 trips, mean 10.03 min, 1,116,988 passenger-hours lost,
-  10.46% severe.
+- Bus: 50,000 trips, mean 12.03 min, SD 7.93, 177,928.12 passenger-hours lost,
+  11.98% severe (>20 min).
+- Train: 50,000 trips, mean 8.03 min, SD 4.75, 940,189.07 passenger-hours lost,
+  2.71% severe.
+- Combined: 100,000 trips, mean 10.03 min, 1,118,117.19 passenger-hours lost,
+  7.35% severe.
 - Trains lose >5x the passenger-hours of buses despite shorter average delays,
   because of higher onboard capacity.
-- Signal Problem is the largest train bottleneck (peaks at 28,070 hrs on the
-  Harlem line); Congestion + Track Work cause >65% of rail passenger-hours.
-- Bus delays are proportionally more severe; weekday bus averages are very
-  stable (11.92-12.28 min).
+- Signal Problem alone accounts for 22.3% of train impact; East of Hudson /
+  Signal Problem is the largest train bottleneck at 37,009.68 passenger-hours.
+- Congestion + Track Work cause 26.3% of rail passenger-hours; bus weekday
+  averages stay within 11.85-12.17 min with no strong weekday effect.
 - Recommendations: dynamic transit signal priority, predictive IoT-based
   maintenance, intelligent rail dispatching, and scaled Parquet architecture.
 Conclusion: Bus failures are frequent-but-recoverable congestion; train
@@ -155,14 +155,15 @@ Streaming (schema parsing, enrichment, 2-minute watermark, 5-minute window with
 1-minute slide) into an in-memory sink; produced live micro-batches during
 execution and queried the sink with SQL.
 Key Results:
-- Micro-batch: 120 rows processed in 423 ms (283.7 rows/sec) - sub-second
-  latency, well within the 1-minute slide.
-- 10 corridors monitored; 1,460 severe-delay alerts (>15 min) triggered.
-- Train windows reached ~3,600 rolling passenger-hours lost vs <550 for Bus.
-- Bus and Train rolling delays converged to ~11.5-12.9 min around the same
-  window, suggesting a shared external factor.
-- Speed and delay are inversely correlated in real time; alert counts are
-  broadly balanced across corridors (135-180 each).
+- 7 simulated Kafka micro-batches (990 events) produced 70 live 5-minute
+  sliding-window rows across 10 corridors.
+- Micro-batch health: 240 rows processed in 4.57 s (52.5 processed rows/sec)
+  including local Spark trigger startup, well within the 1-minute slide.
+- 1,405 severe-delay alerts (>15 min) were emitted; train and bus alert counts
+  remain balanced (715 vs 690).
+- Peak rolling train impact reached 3,004.17 passenger-hours vs 659.16 for Bus.
+- Bus and Train peak window averages reached 15.4 and 13.2 min respectively;
+  alert counts were broadly balanced across corridors (90-195 each).
 Conclusion: A working live telemetry-to-micro-batch loop was demonstrated and
 is ready to feed a real-time dashboard.
 
@@ -178,40 +179,42 @@ rolling delay/speed chart, corridor burden chart, incident feed, severity donut,
 sidebar filters and 3-second auto-refresh). Also rendered static
 Matplotlib/Seaborn snapshots and alert diagnostics.
 Key Results:
-- 990 vehicles monitored (516 Bus, 474 Train).
-- System average delay 10.44 min; 12,585.20 cumulative passenger-hours lost;
-  mean speed 30.3 mph; 94.3% sensors OK.
-- Severity split: 69.1% Normal, 15.7% Warning, 15.3% Critical (~31% alerts).
-- A 34.8-min Harlem train delay cost 85.7 passenger-hours - nearly 8x another
-  incident at the same delay, due to higher onboard load.
+- 990 vehicles monitored (507 Bus, 483 Train).
+- System average delay 9.87 min; 13,869.42 cumulative passenger-hours lost;
+  mean speed 30.98 mph; 93.64% sensors OK.
+- Severity split: 71.6% Normal, 13.7% Warning, 14.6% Critical (28.4% alerts).
+- The highest-impact event (Train / East of Hudson, 33.3 min) cost 119.8
+  passenger-hours - about 31x a comparable-delay event, due to onboard load.
 - Low speed is a strong leading indicator: high-impact points cluster below
-  20 mph; all points above 30 mph stay under 20 passenger-hours lost.
-- Alert burden spread evenly across corridors (Manhattan and Staten Island lead
-  only slightly).
+  20 mph; fast-moving vehicles generally stay under 20 passenger-hours lost.
+- Alert burden is spread across corridors; Hudson Line and Brooklyn/Queens
+  carry the highest counts.
 Conclusion: Low speed and high passenger load, not delay duration alone, drive
 the largest-impact incidents; the dashboard is the operational front end.
 
 
 EXPERIMENT 9 - NoSQL Data Lake Design & Querying
 --------------------------------------------------------------------------------
-Objective: Design, build, and benchmark a multi-model NoSQL data lake and
-quantify indexing speedups.
-Work: Modeled 6,000 documents (3,000 Bus + 3,000 Train) into
-urban_smart_city_datalake.urban_transit_telemetry with embedded subdocuments
-(metrics, telemetry_iot, incident_info) and synthetic GeoJSON coordinates; added
-a 4-document corridor_spatial_zones key-value collection. Created two compound
-indexes, one severity/speed compound index, and one 2dsphere geospatial index;
-benchmarked four query types over 10 iterations before and after indexing.
+Objective: Design, build, and benchmark a document-oriented NoSQL data lake
+and quantify indexing speedups.
+Work: Loaded all 100,000 records into
+urban_mobility_lake.transit_events, added four compound indexes
+(mode/location/delay, reason/delay, mode/hour/date, delay), and benchmarked
+three representative queries before and after indexing. Captured latency,
+documents examined and the winning index from the MongoDB optimizer.
 Key Results (pre -> post index):
-- Q1 multi-criteria filter/sort (idx_mode_delay): 19.35 -> 1.31 ms (14.8x).
-- Q2 spatial aggregation pipeline (idx_loc_severity): 188.27 -> 16.37 ms (11.5x).
-- Q3 severity & speed range (idx_sev_speed): 9.28 -> 0.51 ms (18.2x).
-- Q4 geospatial bounding search (idx_geo_2dsphere): 41.24 -> 4.80 ms (8.6x).
-- Average speedup: 13.28x; every plan shifted from COLLSCAN to IXSCAN + FETCH.
-- Severity tiers (MINOR/MODERATE/SEVERE/CRITICAL) occupy non-overlapping delay
-  ranges; Brooklyn again leads passenger-hours lost; sensor health ~90%+ OK.
-Conclusion: A properly indexed NoSQL data lake supports sub-5ms multi-criteria
-and spatial queries at this scale.
+- Q1 Train delays >20 min on Hudson Line: 229.62 -> 9.66 ms (23.76x);
+  100,000 -> 100 docs examined (idx_mode_location_delay).
+- Q2 Signal Problem incidents >15 min: 234.43 -> 4.98 ms (47.03x);
+  100,000 -> 100 docs examined (idx_reason_delay).
+- Q3 Bus delays during hour 17 in 2023: 172.64 -> 29.25 ms (5.90x);
+  100,000 -> 1,835 docs examined (idx_mode_hour_date).
+- Average speedup: 25.56x; every benchmark switched from a collection scan to
+  a targeted index plan.
+- Ingested 100,000 documents at 9,006 docs/s; data size 34.69 MB, index size
+  5.17 MB; CRUD round-trip passed; Brooklyn still leads passenger-hours lost.
+Conclusion: A properly indexed NoSQL data lake supports targeted multi-criteria
+queries at 100,000-document scale with 6x-47x lower latency.
 
 
 EXPERIMENT 10 - Machine Learning & Final Smart City Showcase
@@ -219,23 +222,26 @@ EXPERIMENT 10 - Machine Learning & Final Smart City Showcase
 Objective: Predict delay duration and severe-congestion risk, and integrate all
 prior layers into one showcase dashboard.
 Work: Re-ingested all 100,000 records and engineered features (Hour, Month,
-DayOfWeek, IsWeekend, IsRushHour, one-hot Mode/Location/Reason). Trained three
-regression models (Random Forest, GBT, Linear Regression baseline) and a Random
-Forest classifier on a 75/25 stratified split; rendered evaluation curves,
-architecture diagram, and a Streamlit showcase with a live ML predictor tab.
+DayOfWeek, IsWeekend, IsRushHour, one-hot Mode/Location/Reason, Passengers).
+Trained three regression models (Random Forest, GBT, Linear Regression
+baseline) and a balanced Random Forest classifier on a 75/25 stratified split;
+tuned the classifier's decision threshold on a validation split; rendered
+evaluation curves, feature importances, an architecture diagram, and a
+Streamlit showcase with a live ML predictor tab.
 Key Results (regression):
-- Random Forest: RMSE 7.476, MAE 5.652, R2 0.060.
-- GBT: RMSE 7.468, MAE 5.643, R2 0.062.
-- Linear Regression: RMSE 7.460, MAE 5.634, R2 0.064.
-Key Results (classification, Severe >= 15 min; 21.0% positive rate):
-- Before fix: AUC 0.6257, accuracy 79.36%, Macro F1 0.0000, 0 predicted
-  positives (degenerate majority-class collapse).
-- After class_weight='balanced': AUC 0.6194, accuracy 57.69%, precision 0.2896,
-  recall 69.52%, Macro F1 0.4089, 12,631 predicted Severe cases.
-- Passenger count drives ~63% of regressor feature importance.
-- Two real bugs fixed: classifier class imbalance, and the live predictor tab
-  now calls the actual trained models instead of a hardcoded formula.
-- Low R2 (~0.06) is a genuine feature-set limitation, not an implementation bug;
+- Linear Regression: RMSE 6.526, MAE 4.345, R2 0.0963 (best).
+- GBT: RMSE 6.532, MAE 4.348, R2 0.0949.
+- Random Forest: RMSE 6.599, MAE 4.410, R2 0.0760.
+Key Results (classification, Severe >= 15 min; 15.5% positive rate):
+- Random Forest with class_weight='balanced' and a 0.40 F1-tuned threshold:
+  AUC 0.6665, accuracy 58.06%, precision 0.2357, recall 0.7586, F1 (Severe)
+  0.3596, Macro F1 0.5239, 12,492 predicted Severe cases.
+- A default 0.5 cutoff still missed most severe cases; validation-based
+  threshold calibration restored operationally useful recall without
+  hardcoding labels.
+- Passenger count is the top single regressor feature (~21% importance), but
+  month/hour/day-of-week collectively carry more signal.
+- Low R2 (~0.10) is a genuine feature-set limitation, not an implementation bug;
   next step is richer signals (live traffic/weather, route historical baselines).
 Conclusion: The full ten-experiment pipeline - ingestion, MapReduce, batch SQL,
 visualization, streaming, dashboards, indexed NoSQL, and ML - was integrated
@@ -249,10 +255,11 @@ CROSS-CUTTING CONCLUSIONS
    (signal/track-driven, high onboard capacity).
 2. Brooklyn (bus) and the East of Hudson / New Haven lines (train) are the
    priority corridors for intervention.
-3. Technical wins: 77.5% Parquet storage savings, ~6x cached SQL speedup,
-   13.28x average NoSQL indexing speedup, and sub-second streaming micro-batches.
-4. ML is honest but limited: classification is usable after class rebalancing;
-   regression needs richer features to improve beyond R2 ~0.06.
+3. Technical wins: 70.7% Parquet storage savings, 8.46x cached SQL speedup,
+   25.56x average NoSQL indexing speedup, and multi-batch streaming with
+   sliding-window alerting.
+4. ML is honest but limited: threshold-calibrated classification is usable;
+   regression needs richer features to improve beyond R2 ~0.10.
 ================================================================================
 END OF SUMMARY
 ================================================================================

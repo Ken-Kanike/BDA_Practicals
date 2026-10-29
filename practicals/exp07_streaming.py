@@ -206,7 +206,7 @@ def main() -> dict:
             "1. Sliding windows update smoothly every minute instead of resetting every five.",
             "2. Severe delays are converted into per-window alert counts as events arrive.",
             "3. Train corridors carry much larger passenger-hour impact per window than bus corridors.",
-            "4. The pipeline sustains sub-second micro-batch latency in local mode.",
+            "4. The pipeline sustains single-digit-second micro-batch latency including local startup.",
             "5. The in-memory sink is query-ready for the Experiment 8 dashboard.",
             "",
             "CONCLUSION",
