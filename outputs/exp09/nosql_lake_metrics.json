@@ -1,0 +1,77 @@
+{
+  "mongo_real": true,
+  "database": "urban_mobility_lake",
+  "collection": "transit_events",
+  "documents": 100000,
+  "insert_seconds": 11.104,
+  "docs_per_second": 9006.1,
+  "index_count": 4,
+  "index_build_seconds": 5.412,
+  "data_size_mb": 34.69,
+  "index_size_mb": 5.17,
+  "crud_ok": true,
+  "queries": [
+    {
+      "query_id": "Q1",
+      "description": "Train delays > 20 min on Hudson Line, highest first",
+      "baseline_ms": 229.616,
+      "indexed_ms": 9.664,
+      "speedup": 23.76,
+      "baseline_docs_examined": 100000,
+      "indexed_docs_examined": 100,
+      "index_used": "idx_mode_location_delay",
+      "baseline_stage": "PROJECTION_SIMPLE",
+      "indexed_stage": "LIMIT",
+      "returned": 100
+    },
+    {
+      "query_id": "Q2",
+      "description": "Signal Problem incidents > 15 min, highest first",
+      "baseline_ms": 234.432,
+      "indexed_ms": 4.984,
+      "speedup": 47.03,
+      "baseline_docs_examined": 100000,
+      "indexed_docs_examined": 100,
+      "index_used": "idx_reason_delay",
+      "baseline_stage": "PROJECTION_SIMPLE",
+      "indexed_stage": "LIMIT",
+      "returned": 100
+    },
+    {
+      "query_id": "Q3",
+      "description": "Bus delays during hour 17 across 2023",
+      "baseline_ms": 172.642,
+      "indexed_ms": 29.253,
+      "speedup": 5.9,
+      "baseline_docs_examined": 100000,
+      "indexed_docs_examined": 1835,
+      "index_used": "idx_mode_hour_date",
+      "baseline_stage": "PROJECTION_SIMPLE",
+      "indexed_stage": "PROJECTION_SIMPLE",
+      "returned": 100
+    }
+  ],
+  "aggregation_top": [
+    {
+      "mode": "Train",
+      "location": "New Haven",
+      "incidents": 641,
+      "avg_delay": 21.18,
+      "total_impact": 31825.9
+    },
+    {
+      "mode": "Train",
+      "location": "East of Hudson",
+      "incidents": 625,
+      "avg_delay": 20.63,
+      "total_impact": 30268.8
+    },
+    {
+      "mode": "Train",
+      "location": "Harlem",
+      "incidents": 534,
+      "avg_delay": 20.98,
+      "total_impact": 26706.6
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+name,keys
+idx_mode_location_delay,"mode:1, location:1, delay_minutes:-1"
+idx_reason_delay,"reason:1, delay_minutes:-1"
+idx_mode_hour_date,"mode:1, hour:1, date:1"
+idx_delay_desc,delay_minutes:-1

@@ -1,0 +1,11 @@
+mode,location,incidents,avg_delay,total_impact
+Train,New Haven,641,21.18,31825.9
+Train,East of Hudson,625,20.63,30268.8
+Train,Harlem,534,20.98,26706.6
+Train,Hudson Line,511,20.11,24275.9
+Bus,Brooklyn,3449,22.67,23575.8
+Bus,Queens,3104,23.04,21320.8
+Bus,Manhattan,3117,22.77,20866.5
+Train,Pascack Valley,427,20.82,20409.9
+Train,Port Jervis,396,21.06,19576.3
+Train,Bergen County,368,20.46,17711.9

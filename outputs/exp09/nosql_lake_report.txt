@@ -1,0 +1,73 @@
+EXPERIMENT 9 - NOSQL DATA LAKE, INDEXING & QUERY OPTIMIZATION
+==============================================================================
+Generated      : 2026-10-29T21:56:52
+MongoDB        : real server (mongodb://127.0.0.1:27017/)
+Database       : urban_mobility_lake
+Collection     : transit_events
+Documents      : 100,000
+Ingest time    : 11.10 s (9,006 docs/s)
+Data size      : 34.69 MB
+Index size     : 5.17 MB
+
+INDEX CATALOG
+------------------------------------------------------------------------------
+                   name                                 keys
+idx_mode_location_delay mode:1, location:1, delay_minutes:-1
+       idx_reason_delay           reason:1, delay_minutes:-1
+     idx_mode_hour_date               mode:1, hour:1, date:1
+         idx_delay_desc                     delay_minutes:-1
+Index build time: 5.412 s
+
+QUERY OPTIMIZER BENCHMARK
+------------------------------------------------------------------------------
+query_id  baseline_ms  indexed_ms  speedup  baseline_docs_examined  indexed_docs_examined              index_used
+      Q1      229.616       9.664    23.76                  100000                    100 idx_mode_location_delay
+      Q2      234.432       4.984    47.03                  100000                    100        idx_reason_delay
+      Q3      172.642      29.253     5.90                  100000                   1835      idx_mode_hour_date
+
+QUERY DETAILS
+------------------------------------------------------------------------------
+Q1: Train delays > 20 min on Hudson Line, highest first
+  Baseline: 229.62 ms, 100,000 docs examined, stage=PROJECTION_SIMPLE
+  Indexed : 9.66 ms, 100 docs examined, stage=LIMIT, index=idx_mode_location_delay
+  Speedup : 23.76x, rows returned=100
+
+Q2: Signal Problem incidents > 15 min, highest first
+  Baseline: 234.43 ms, 100,000 docs examined, stage=PROJECTION_SIMPLE
+  Indexed : 4.98 ms, 100 docs examined, stage=LIMIT, index=idx_reason_delay
+  Speedup : 47.03x, rows returned=100
+
+Q3: Bus delays during hour 17 across 2023
+  Baseline: 172.64 ms, 100,000 docs examined, stage=PROJECTION_SIMPLE
+  Indexed : 29.25 ms, 1,835 docs examined, stage=PROJECTION_SIMPLE, index=idx_mode_hour_date
+  Speedup : 5.90x, rows returned=100
+
+CORRIDOR AGGREGATION - DELAYS >= 15 MINUTES
+------------------------------------------------------------------------------
+ mode       location  incidents  avg_delay  total_impact
+Train      New Haven        641      21.18       31825.9
+Train East of Hudson        625      20.63       30268.8
+Train         Harlem        534      20.98       26706.6
+Train    Hudson Line        511      20.11       24275.9
+  Bus       Brooklyn       3449      22.67       23575.8
+  Bus         Queens       3104      23.04       21320.8
+  Bus      Manhattan       3117      22.77       20866.5
+Train Pascack Valley        427      20.82       20409.9
+Train    Port Jervis        396      21.06       19576.3
+Train  Bergen County        368      20.46       17711.9
+
+CRUD ROUND-TRIP
+------------------------------------------------------------------------------
+Insert -> update -> find -> delete: PASSED
+
+KEY FINDINGS
+------------------------------------------------------------------------------
+1. Compound indexes turn repeated corridor/reason lookups into targeted index scans.
+2. The optimizer selects the composite prefix that matches equality filters and sort order.
+3. Documents examined - not just latency - prove the index is doing real work.
+4. Aggregations over severe delays reuse idx_delay_desc and return in one pass.
+5. Index storage is a small fraction of the 100,000-document lake.
+
+CONCLUSION
+------------------------------------------------------------------------------
+The 100,000-record MongoDB data lake was ingested with chunked bulk writes, indexed on mode/location/delay, reason/delay, mode/hour/date and delay, and benchmarked against the same queries before indexing. Every benchmark query returned identical results with fewer documents examined and lower latency, confirming that the indexes are effective rather than merely present.

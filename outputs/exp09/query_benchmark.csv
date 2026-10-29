@@ -1,0 +1,4 @@
+query_id,description,baseline_ms,indexed_ms,speedup,baseline_docs_examined,indexed_docs_examined,index_used,baseline_stage,indexed_stage,returned
+Q1,"Train delays > 20 min on Hudson Line, highest first",229.616,9.664,23.76,100000,100,idx_mode_location_delay,PROJECTION_SIMPLE,LIMIT,100
+Q2,"Signal Problem incidents > 15 min, highest first",234.432,4.984,47.03,100000,100,idx_reason_delay,PROJECTION_SIMPLE,LIMIT,100
+Q3,Bus delays during hour 17 across 2023,172.642,29.253,5.9,100000,1835,idx_mode_hour_date,PROJECTION_SIMPLE,PROJECTION_SIMPLE,100
