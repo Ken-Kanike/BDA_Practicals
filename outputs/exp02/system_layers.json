@@ -1,0 +1,38 @@
+[
+  {
+    "layer": "Ingestion Layer",
+    "technology": "Pandas / PySpark CSV readers; simulated Kafka producer",
+    "purpose": "Load raw bus/train delay logs and live IoT telemetry into the platform.",
+    "experiments": "Exp 1, 4, 7"
+  },
+  {
+    "layer": "Storage Layer",
+    "technology": "HDFS-style partitioned Parquet data lake; MongoDB document store",
+    "purpose": "Persist raw and cleaned data at scale with partition pruning and flexible schemas.",
+    "experiments": "Exp 4, 9"
+  },
+  {
+    "layer": "Processing Layer",
+    "technology": "Spark RDDs (MapReduce), Spark SQL, Catalyst, window functions",
+    "purpose": "Clean, aggregate, join and analyse 100,000 unified transit records.",
+    "experiments": "Exp 3, 5, 6"
+  },
+  {
+    "layer": "Streaming Layer",
+    "technology": "Spark Structured Streaming, watermarks, sliding windows",
+    "purpose": "Compute live rolling delay metrics and severe-delay alerts.",
+    "experiments": "Exp 7, 8"
+  },
+  {
+    "layer": "Machine Learning Layer",
+    "technology": "scikit-learn Random Forest / GBT / Linear Regression",
+    "purpose": "Predict delay duration and severe-congestion risk from trip features.",
+    "experiments": "Exp 10"
+  },
+  {
+    "layer": "Serving / Dashboard Layer",
+    "technology": "Streamlit + Plotly, Matplotlib/Seaborn reports",
+    "purpose": "Give operators live KPIs, incident feeds, model predictions and static reports.",
+    "experiments": "Exp 6, 8, 10"
+  }
+]

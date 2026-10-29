@@ -1,0 +1,28 @@
+EXPERIMENT 2 - PROJECT PROPOSAL & ARCHITECTURE SUMMARY
+========================================================================
+Title : Comparative Study of Transport Modes - Big Data Analysis of Bus vs Train Delays
+Domain: Transportation / Smart City
+Data  : 50,000 bus + 50,000 train records (2-year window)
+
+OBJECTIVES
+- Ingest and store bus/train delay records in a data lake.
+- Process the data at scale with distributed in-memory computing.
+- Predict delay duration and severe-delay risk.
+- Provide interactive reliability dashboards for transit administrators.
+
+TEAM
+- Chaitanya Jhade (48)  : Data Engineer
+- Gaurav Joshi (50)     : Data Scientist
+- Junaid Shaikh (137)   : Data Analyst
+- Soham Sonavane (138)  : BI & Visualization Engineer
+
+ARCHITECTURE LAYERS
+- Ingestion Layer: Pandas / PySpark CSV readers; simulated Kafka producer (Exp 1, 4, 7)
+- Storage Layer: HDFS-style partitioned Parquet data lake; MongoDB document store (Exp 4, 9)
+- Processing Layer: Spark RDDs (MapReduce), Spark SQL, Catalyst, window functions (Exp 3, 5, 6)
+- Streaming Layer: Spark Structured Streaming, watermarks, sliding windows (Exp 7, 8)
+- Machine Learning Layer: scikit-learn Random Forest / GBT / Linear Regression (Exp 10)
+- Serving / Dashboard Layer: Streamlit + Plotly, Matplotlib/Seaborn reports (Exp 6, 8, 10)
+
+Generated: 2026-10-29T20:48:25
+Artifacts: docs/PROJECT_PROPOSAL.md, architecture.png, experiment_pipeline.png, system_layers.json
