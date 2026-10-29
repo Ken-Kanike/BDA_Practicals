@@ -1,0 +1,9 @@
+Mode,Severity,Count
+Bus,Minor,25203
+Bus,Moderate,18809
+Bus,Severe,4291
+Bus,Critical,1697
+Train,Minor,39021
+Train,Moderate,9623
+Train,Severe,1071
+Train,Critical,285

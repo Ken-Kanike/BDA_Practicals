@@ -1,0 +1,37 @@
+{
+  "records": 100000,
+  "reused_exp05_parquet": true,
+  "scorecard": [
+    {
+      "Mode": "Bus",
+      "Trips": 50000,
+      "Mean_Delay": 12.03,
+      "StdDev": 7.93,
+      "Passenger_Hours_Lost": 177928.12,
+      "Severe_20_Pct": 11.98
+    },
+    {
+      "Mode": "Train",
+      "Trips": 50000,
+      "Mean_Delay": 8.03,
+      "StdDev": 4.75,
+      "Passenger_Hours_Lost": 940189.07,
+      "Severe_20_Pct": 2.71
+    }
+  ],
+  "morning_impact_hours": 343359.39,
+  "evening_impact_hours": 343163.65,
+  "night_impact_hours": 158558.57,
+  "train_signal_share_pct": 22.28,
+  "train_congestion_track_share_pct": 26.34,
+  "bus_top_bottleneck": {
+    "location": "Brooklyn",
+    "reason": "Heavy Traffic",
+    "impact_hours": 14556.27
+  },
+  "train_top_bottleneck": {
+    "location": "East of Hudson",
+    "reason": "Signal Problem",
+    "impact_hours": 37009.68
+  }
+}

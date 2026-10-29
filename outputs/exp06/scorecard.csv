@@ -1,0 +1,3 @@
+Mode,Trips,Mean_Delay,StdDev,Passenger_Hours_Lost,Severe_20_Pct
+Bus,50000,12.03,7.93,177928.12,11.98
+Train,50000,8.03,4.75,940189.07,2.71

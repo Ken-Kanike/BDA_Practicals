@@ -1,0 +1,60 @@
+EXPERIMENT 6 - BATCH ANALYTICS VISUALIZATION & REPORTING
+==============================================================================
+Generated : 2026-10-29T21:35:25
+Source    : Experiment 5 Parquet artifacts
+Path      : C:\Users\junai\Desktop\BDA_docx\outputs\exp05\parquet_benchmarks\unified_transit_master.parquet
+Records   : 100,000
+
+MULTIMODAL PERFORMANCE & RELIABILITY SCORECARD
+------------------------------------------------------------------------------
+ Mode  Trips  Mean_Delay  StdDev  Passenger_Hours_Lost  Severe_20_Pct
+  Bus  50000       12.03    7.93             177928.12          11.98
+Train  50000        8.03    4.75             940189.07           2.71
+
+TEMPORAL & SEASONAL URBAN DYNAMICS
+------------------------------------------------------------------------------
+Morning peak (06-09) passenger-hours lost : 343,359.39
+Evening peak (16-19) passenger-hours lost : 343,163.65
+Night off-peak (20-05) passenger-hours lost: 158,558.57
+Bus weekday mean delay range              : 11.85-12.17 minutes (stable across all seven days)
+
+GEOSPATIAL BOTTLENECKS & ROOT-CAUSE ATTRIBUTION
+------------------------------------------------------------------------------
+Top 5 bus location/reason combinations:
+Location   Reason            
+Brooklyn   Heavy Traffic         14556.27
+Queens     Heavy Traffic         12996.82
+Manhattan  Heavy Traffic         12127.63
+Brooklyn   Mechanical Problem     8086.45
+Manhattan  Mechanical Problem     7277.47
+
+Top 5 train location/reason combinations:
+Location        Reason            
+East of Hudson  Signal Problem        37009.68
+New Haven       Signal Problem        36543.33
+Harlem          Signal Problem        31804.73
+Hudson Line     Signal Problem        31684.63
+East of Hudson  Mechanical Failure    31549.33
+
+Train Signal Problem passenger-hours      : 209,496.52 (22.3% of train impact)
+Train Congestion + Track Work impact      : 247,660.53 (26.3% of train impact)
+
+STRATEGIC SMART CITY RECOMMENDATIONS
+------------------------------------------------------------------------------
+1. Dynamic Transit Signal Priority on Brooklyn/Manhattan bus corridors at 07:00-09:00 and 16:00-18:00.
+2. Predictive IoT fleet maintenance to reduce mechanical-problem delays.
+3. Intelligent rail dispatching on East of Hudson and New Haven high-capacity corridors.
+4. Scale the partitioned Parquet architecture for municipal pipelines (large storage savings).
+
+KEY ANALYTICAL FINDINGS
+------------------------------------------------------------------------------
+1. Train mean delay (8.03 min) is lower than bus (12.03 min), but train passenger-hours lost (940,189) far exceed bus (177,928) due to higher onboard capacity.
+2. Severe (>20 min) incidents: bus 11.98% vs train 2.71% - bus delays are proportionally more severe.
+3. Largest bus bottleneck: Brooklyn / Heavy Traffic (14,556 passenger-hours).
+4. Largest train bottleneck: East of Hudson / Signal Problem (37,010 passenger-hours).
+5. Signal Problem alone accounts for 22.3% of train impact.
+6. Bus weekday averages stay within 11.85-12.17 minutes - no strong weekday/weekend effect.
+
+CONCLUSION
+------------------------------------------------------------------------------
+The Experiment 5 aggregates were transformed into a full visual analytics suite: rolling time-series trends, monthly passenger-hour curves, day-of-week/hour heatmaps, root-cause cross-tabulations and an executive KPI dashboard. Bus and train delays fail in structurally different ways: buses suffer frequent congestion-driven delays, while trains suffer rarer but much higher-impact signal and track incidents.
