@@ -1,0 +1,77 @@
+EXPERIMENT 1 - DOMAIN SELECTION, SETUP & EXPLORATORY DATA ANALYSIS
+==============================================================================
+Generated : 2026-10-29T20:47:31
+Seed      : 42
+
+DATASET SHAPE
+------------------------------------------------------------------------------
+Bus   : 50,000 rows x 7 columns -> Date, Route_ID, Borough, Scheduled_Time, Reason, Delay_Minutes, Number_Of_Students_On_Bus
+Train : 50,000 rows x 6 columns -> Date, Line, Scheduled_Time, Reason, Delay_Minutes, Passengers_Onboard
+
+DATA QUALITY
+------------------------------------------------------------------------------
+Bus null values   : 0  ({'Date': 0, 'Route_ID': 0, 'Borough': 0, 'Scheduled_Time': 0, 'Reason': 0, 'Delay_Minutes': 0, 'Number_Of_Students_On_Bus': 0})
+Train null values : 0  ({'Date': 0, 'Line': 0, 'Scheduled_Time': 0, 'Reason': 0, 'Delay_Minutes': 0, 'Passengers_Onboard': 0})
+Bus duplicates    : 0
+Train duplicates  : 0
+
+DELAY STATISTICS (minutes)
+------------------------------------------------------------------------------
+Metric                     Bus       Train
+rows                     50000       50000
+mean                     12.03        8.03
+median                    9.94        6.78
+stddev                   7.926       4.752
+min                       1.03        1.12
+p90                       21.3        13.3
+p99                      41.09       25.46
+max                      97.37       81.85
+severe_20_pct            11.98        2.71
+
+TOP 10 BUS DELAY REASONS
+------------------------------------------------------------------------------
+                Reason  count
+         Heavy Traffic  14177
+    Mechanical Problem   7333
+Late Return From Route   5967
+     Road Construction   5091
+    Weather Conditions   5025
+              Accident   4500
+       Driver Shortage   4000
+                 Other   3907
+
+TOP 10 TRAIN DELAY REASONS
+------------------------------------------------------------------------------
+             Reason  count
+     Signal Problem   9991
+ Mechanical Failure   8979
+         Track Work   7581
+         Congestion   6017
+ Weather Conditions   5909
+Overhead Line Issue   4019
+         Door Fault   3800
+              Other   3704
+
+BUS RECORDS BY BOROUGH
+------------------------------------------------------------------------------
+      Borough  count
+     Brooklyn  14499
+    Manhattan  12891
+       Queens  12883
+        Bronx   5930
+Staten Island   3797
+
+TRAIN RECORDS BY LINE
+------------------------------------------------------------------------------
+          Line  count
+East of Hudson   8998
+     New Haven   8728
+        Harlem   7586
+   Hudson Line   7390
+Pascack Valley   5908
+   Port Jervis   5724
+ Bergen County   5666
+
+CONCLUSION
+------------------------------------------------------------------------------
+Both datasets are clean (zero nulls and duplicates) and structurally comparable at 50,000 records each. Bus mean delay is 12.03 min vs 8.03 min for trains; both distributions are right-skewed. 'Heavy Traffic' dominates bus delays and 'Signal Problem' dominates train delays. The data is ready for distributed processing.

@@ -1,0 +1,36 @@
+{
+  "bus_rows": 50000,
+  "train_rows": 50000,
+  "bus_columns": 7,
+  "train_columns": 6,
+  "bus_nulls": 0,
+  "train_nulls": 0,
+  "bus_duplicates": 0,
+  "train_duplicates": 0,
+  "bus_stats": {
+    "rows": 50000,
+    "mean": 12.03,
+    "median": 9.94,
+    "stddev": 7.926,
+    "min": 1.03,
+    "max": 97.37,
+    "p90": 21.3,
+    "p99": 41.09,
+    "severe_20_pct": 11.98
+  },
+  "train_stats": {
+    "rows": 50000,
+    "mean": 8.03,
+    "median": 6.78,
+    "stddev": 4.752,
+    "min": 1.12,
+    "max": 81.85,
+    "p90": 13.3,
+    "p99": 25.46,
+    "severe_20_pct": 2.71
+  },
+  "top_bus_reason": "Heavy Traffic",
+  "top_bus_reason_count": 14177,
+  "top_train_reason": "Signal Problem",
+  "top_train_reason_count": 9991
+}
