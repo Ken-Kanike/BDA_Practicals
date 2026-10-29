@@ -1,0 +1,11 @@
+event_time,sensor_id,vehicle_id,mode,route_or_line,location,speed_mph,delay_minutes,passenger_load,reason,sensor_health,passenger_hours_lost,alert_status
+2026-10-29 21:32:25,IOT-4749,BU-006-088,Bus,Queens,Queens,19.6,34.92,59,Weather Delay,DEGRADED,34.338,CRITICAL
+2026-10-29 21:32:18,IOT-6246,TR-003-126,Train,Hudson Line,Hudson Line,14.2,34.82,115,Heavy Traffic,OK,66.73833333333333,CRITICAL
+2026-10-29 21:32:35,IOT-3361,TR-004-065,Train,New Haven,New Haven,11.2,34.7,97,Weather Delay,OK,56.098333333333336,CRITICAL
+2026-10-29 21:32:42,IOT-7495,TR-003-064,Train,Hudson Line,Hudson Line,18.5,34.62,114,Signal Problem,OK,65.77799999999999,CRITICAL
+2026-10-29 21:32:20,IOT-2909,BU-003-027,Bus,Manhattan,Manhattan,10.7,34.59,34,Track Work,OK,19.601000000000003,CRITICAL
+2026-10-29 21:32:30,IOT-8794,TR-003-078,Train,Hudson Line,Hudson Line,18.7,34.56,135,Mechanical Problem,OK,77.76,CRITICAL
+2026-10-29 21:32:21,IOT-6811,BU-006-074,Bus,Staten Island,Staten Island,9.4,34.52,40,Heavy Traffic,OK,23.013333333333335,CRITICAL
+2026-10-29 21:32:13,IOT-4805,BU-004-144,Bus,Brooklyn,Brooklyn,19.9,34.48,17,Weather Delay,OK,9.769333333333332,CRITICAL
+2026-10-29 21:32:15,IOT-9245,TR-005-064,Train,Harlem,Harlem,12.8,34.28,194,Signal Problem,OK,110.83866666666668,CRITICAL
+2026-10-29 21:32:55,IOT-1053,TR-004-111,Train,Pascack Valley,Pascack Valley,14.1,34.23,121,Signal Problem,OK,69.0305,CRITICAL

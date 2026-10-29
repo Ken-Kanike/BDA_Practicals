@@ -1,0 +1,20 @@
+{
+  "source": "Experiment 7 streaming_input",
+  "total_vehicles": 990,
+  "bus_count": 507,
+  "train_count": 483,
+  "avg_delay": 9.873,
+  "total_passenger_hours": 13869.42,
+  "avg_speed": 30.98,
+  "sensor_health_pct": 93.64,
+  "critical": 145,
+  "warning": 136,
+  "normal": 709,
+  "corridors": 10,
+  "highest_impact": {
+    "mode": "Train",
+    "location": "East of Hudson",
+    "delay_minutes": 33.28,
+    "passenger_hours": 119.808
+  }
+}

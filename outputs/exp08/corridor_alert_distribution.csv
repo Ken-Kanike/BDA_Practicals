@@ -1,0 +1,31 @@
+location,mode,alert_status,count
+Bronx,Bus,CRITICAL,13
+Bronx,Bus,NORMAL,76
+Bronx,Bus,WARNING,9
+Brooklyn,Bus,CRITICAL,18
+Brooklyn,Bus,NORMAL,82
+Brooklyn,Bus,WARNING,17
+East of Hudson,Train,CRITICAL,14
+East of Hudson,Train,NORMAL,56
+East of Hudson,Train,WARNING,17
+Harlem,Train,CRITICAL,13
+Harlem,Train,NORMAL,74
+Harlem,Train,WARNING,15
+Hudson Line,Train,CRITICAL,25
+Hudson Line,Train,NORMAL,68
+Hudson Line,Train,WARNING,14
+Manhattan,Bus,CRITICAL,15
+Manhattan,Bus,NORMAL,79
+Manhattan,Bus,WARNING,13
+New Haven,Train,CRITICAL,9
+New Haven,Train,NORMAL,81
+New Haven,Train,WARNING,11
+Pascack Valley,Train,CRITICAL,13
+Pascack Valley,Train,NORMAL,61
+Pascack Valley,Train,WARNING,12
+Queens,Bus,CRITICAL,17
+Queens,Bus,NORMAL,64
+Queens,Bus,WARNING,18
+Staten Island,Bus,CRITICAL,8
+Staten Island,Bus,NORMAL,68
+Staten Island,Bus,WARNING,10

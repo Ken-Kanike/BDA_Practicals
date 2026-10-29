@@ -1,0 +1,55 @@
+EXPERIMENT 8 - REAL-TIME OPERATIONAL DASHBOARD
+==============================================================================
+Generated : 2026-10-29T21:54:10
+Source    : Experiment 7 streaming_input
+
+REAL-TIME SYSTEM KPI SCORECARD
+------------------------------------------------------------------------------
+Total monitored vehicles  : 990 (507 Bus, 483 Train)
+System average delay      : 9.87 minutes
+Cumulative passenger impact: 13,869.42 passenger-hours
+Mean vehicle speed        : 31.0 mph
+IoT sensor telemetry health: 93.6% OK
+Thresholds                : WARNING >= 15.0 min | CRITICAL >= 25.0 min
+Alert mix                 : CRITICAL 145 (14.6%), WARNING 136 (13.7%), NORMAL 709 (71.6%)
+
+TOP ACTIVE THRESHOLD INCIDENT ALERTS
+------------------------------------------------------------------------------
+ mode       location  delay_minutes  speed_mph  passenger_hours_lost             reason
+  Bus         Queens          34.92       19.6             34.338000      Weather Delay
+Train    Hudson Line          34.82       14.2             66.738333      Heavy Traffic
+Train      New Haven          34.70       11.2             56.098333      Weather Delay
+Train    Hudson Line          34.62       18.5             65.778000     Signal Problem
+  Bus      Manhattan          34.59       10.7             19.601000         Track Work
+Train    Hudson Line          34.56       18.7             77.760000 Mechanical Problem
+  Bus  Staten Island          34.52        9.4             23.013333      Heavy Traffic
+  Bus       Brooklyn          34.48       19.9              9.769333      Weather Delay
+Train         Harlem          34.28       12.8            110.838667     Signal Problem
+Train Pascack Valley          34.23       14.1             69.030500     Signal Problem
+
+CORRIDOR OPERATIONAL ALERT DISTRIBUTION
+------------------------------------------------------------------------------
+alert_status          CRITICAL  WARNING  NORMAL
+location       mode                            
+Bronx          Bus          13        9      76
+Brooklyn       Bus          18       17      82
+East of Hudson Train        14       17      56
+Harlem         Train        13       15      74
+Hudson Line    Train        25       14      68
+Manhattan      Bus          15       13      79
+New Haven      Train         9       11      81
+Pascack Valley Train        13       12      61
+Queens         Bus          17       18      64
+Staten Island  Bus           8       10      68
+
+KEY ANALYTICAL FINDINGS
+------------------------------------------------------------------------------
+1. 71.6% of events are normal, but Critical (14.6%) and Warning (13.7%) alerts are almost evenly split - severe incidents are a steady share of traffic, not rare outliers.
+2. The highest-impact event (Train / East of Hudson) had a 33.3-minute delay but cost 119.8 passenger-hours - about 31.2x a comparable-delay event, due to onboard load.
+3. Critical-tier delays cluster near the threshold rather than becoming runaway outliers.
+4. Low speed is a strong leading indicator of high passenger impact.
+5. Alert burden is spread across corridors rather than concentrated in one location.
+
+CONCLUSION
+------------------------------------------------------------------------------
+The real-time dashboard combines live KPI cards, a rolling delay trajectory, corridor burden charts, an automated threshold incident feed and severity diagnostics. Across 990 monitored vehicles it flagged 281 active alerts against a 9.87-minute average delay and 13,869 cumulative passenger-hours lost, showing that low speed and high passenger load - not delay duration alone - drive the largest-impact incidents. The Streamlit app in practicals/app_dashboard.py serves the same view interactively.
