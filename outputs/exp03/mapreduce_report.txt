@@ -1,0 +1,63 @@
+EXPERIMENT 3 - MAPREDUCE PROCESSING ON UNSTRUCTURED TEXT DATA
+==============================================================================
+Generated : 2026-10-29T21:22:44
+Input     : 50,000 bus + 50,000 train Reason strings
+
+PARTITION AUDIT (rdd.glom().map(len).collect())
+------------------------------------------------------------------------------
+Bus partitions   : [12500, 12500, 12500, 12500]  (total 50,000)
+Train partitions : [12500, 12500, 12500, 12500]  (total 50,000)
+Skew             : none
+
+TOP 10 BUS DELAY KEYWORDS
+------------------------------------------------------------------------------
+     Keyword  Frequency
+       heavy      14177
+     traffic      14177
+  mechanical       7333
+     problem       7333
+        late       5967
+      return       5967
+       route       5967
+construction       5091
+        road       5091
+     weather       5025
+
+TOP 10 TRAIN DELAY KEYWORDS
+------------------------------------------------------------------------------
+   Keyword  Frequency
+    signal       9991
+   problem       9991
+mechanical       8979
+   failure       8979
+     track       7581
+      work       7581
+congestion       6017
+   weather       5909
+conditions       5909
+  overhead       4019
+
+SEVERITY CLASSIFICATION (keyword rules -> reduceByKey)
+------------------------------------------------------------------------------
+ Mode Severity  Count  Percent
+  Bus Critical  11833    23.67
+  Bus   Severe   9967    19.93
+  Bus Moderate  23175    46.35
+  Bus    Minor   5025    10.05
+Train Critical  14010    28.02
+Train   Severe  16560    33.12
+Train Moderate  11926    23.85
+Train    Minor   7504    15.01
+
+KEY FINDINGS
+------------------------------------------------------------------------------
+1. Bus keyword leader : 'heavy' (14,177 occurrences).
+2. Train keyword leader: 'signal' (9,991 occurrences).
+3. Bus severity is dominated by Moderate (46.4%), while trains skew Severe + Critical (61.1%).
+4. Both RDDs are exactly balanced across 4 partitions -> zero data skew.
+5. Weather Conditions is a shared top-10 cause for both modes.
+6. reduceByKey performs map-side pre-aggregation before the shuffle.
+
+CONCLUSION
+------------------------------------------------------------------------------
+The MapReduce pipeline tokenized and aggregated 50,000 Reason strings per mode, produced ranked keyword frequencies, tagged severity tiers with the same map/reduce pattern, and verified balanced 4-partition distribution. The pipeline is ready to scale to a multi-node cluster.

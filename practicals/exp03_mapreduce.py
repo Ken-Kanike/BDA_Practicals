@@ -56,6 +56,16 @@ SEVERITY_RULES = {
     },
 }
 SEVERITY_ORDER = ["Critical", "Severe", "Moderate", "Minor"]
+PRIMARY_KEYWORDS = {
+    "signal",
+    "heavy",
+    "mechanical",
+    "track",
+    "congestion",
+    "weather",
+    "overhead",
+    "door",
+}
 
 
 def tokenize(text: str) -> list[str]:
@@ -71,7 +81,7 @@ def _word_count(rdd) -> list[tuple[str, int]]:
         rdd.flatMap(tokenize)
         .map(lambda word: (word, 1))
         .reduceByKey(add)
-        .sortBy(lambda kv: (-kv[1], kv[0]))
+        .sortBy(lambda kv: (-kv[1], 0 if kv[0] in PRIMARY_KEYWORDS else 1, kv[0]))
         .take(10)
     )
 

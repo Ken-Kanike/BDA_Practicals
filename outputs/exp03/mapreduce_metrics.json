@@ -1,0 +1,110 @@
+{
+  "bus_partitions": [
+    12500,
+    12500,
+    12500,
+    12500
+  ],
+  "train_partitions": [
+    12500,
+    12500,
+    12500,
+    12500
+  ],
+  "bus_top_keywords": [
+    [
+      "heavy",
+      14177
+    ],
+    [
+      "traffic",
+      14177
+    ],
+    [
+      "mechanical",
+      7333
+    ],
+    [
+      "problem",
+      7333
+    ],
+    [
+      "late",
+      5967
+    ],
+    [
+      "return",
+      5967
+    ],
+    [
+      "route",
+      5967
+    ],
+    [
+      "construction",
+      5091
+    ],
+    [
+      "road",
+      5091
+    ],
+    [
+      "weather",
+      5025
+    ]
+  ],
+  "train_top_keywords": [
+    [
+      "signal",
+      9991
+    ],
+    [
+      "problem",
+      9991
+    ],
+    [
+      "mechanical",
+      8979
+    ],
+    [
+      "failure",
+      8979
+    ],
+    [
+      "track",
+      7581
+    ],
+    [
+      "work",
+      7581
+    ],
+    [
+      "congestion",
+      6017
+    ],
+    [
+      "weather",
+      5909
+    ],
+    [
+      "conditions",
+      5909
+    ],
+    [
+      "overhead",
+      4019
+    ]
+  ],
+  "bus_severity": {
+    "Moderate": 23175,
+    "Severe": 9967,
+    "Minor": 5025,
+    "Critical": 11833
+  },
+  "train_severity": {
+    "Severe": 16560,
+    "Minor": 7504,
+    "Moderate": 11926,
+    "Critical": 14010
+  }
+}

@@ -14,7 +14,8 @@ _WINUTILS_CANDIDATES = [
 
 _PYTHON_CANDIDATES = [
     os.environ.get("PYSPARK_PYTHON"),
-    r"C:\Users\junai\AppData\Local\Temp\opencode\py312\python.exe",
+    r"C:\Users\junai\AppData\Local\Temp\opencode\py311\python.exe",
+    r"C:\Users\junai\AppData\Local\Programs\Python\Python311\python.exe",
     sys.executable,
 ]
 

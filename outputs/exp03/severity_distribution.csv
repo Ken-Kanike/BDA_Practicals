@@ -1,0 +1,9 @@
+Mode,Severity,Count,Percent
+Bus,Critical,11833,23.67
+Bus,Severe,9967,19.93
+Bus,Moderate,23175,46.35
+Bus,Minor,5025,10.05
+Train,Critical,14010,28.02
+Train,Severe,16560,33.12
+Train,Moderate,11926,23.85
+Train,Minor,7504,15.01
