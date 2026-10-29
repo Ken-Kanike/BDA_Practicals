@@ -10,6 +10,7 @@ data/*.csv
 data/metadata.json
 
 # Spark / streaming runtime state
+.hadoop/
 outputs/**/hdfs_staging/
 outputs/**/streaming_input/
 outputs/**/checkpoint/

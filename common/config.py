@@ -70,6 +70,21 @@ def output_dir(experiment: str) -> Path:
     return path
 
 
+def portable_text(text: str) -> str:
+    """Replace machine-specific absolute project paths with a placeholder."""
+    for variant in (ROOT.as_uri(), ROOT.as_posix(), str(ROOT)):
+        text = text.replace(variant, "<PROJECT_ROOT>")
+    return text
+
+
+def rel(path: Path) -> str:
+    """Render a project path as a forward-slash path relative to the repo root."""
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def ensure_dirs() -> None:
     for path in (DATA_DIR, OUTPUTS_DIR, DOCS_DIR):
         path.mkdir(parents=True, exist_ok=True)

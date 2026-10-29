@@ -1,8 +1,8 @@
 EXPERIMENT 6 - BATCH ANALYTICS VISUALIZATION & REPORTING
 ==============================================================================
-Generated : 2026-10-29T21:35:25
+Generated : 2026-10-29T23:44:28
 Source    : Experiment 5 Parquet artifacts
-Path      : C:\Users\junai\Desktop\BDA_docx\outputs\exp05\parquet_benchmarks\unified_transit_master.parquet
+Path      : outputs/exp05/parquet_benchmarks/unified_transit_master.parquet
 Records   : 100,000
 
 MULTIMODAL PERFORMANCE & RELIABILITY SCORECARD

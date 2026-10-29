@@ -14,7 +14,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from common.config import BUS_CSV, TRAIN_CSV, output_dir
+from common.config import BUS_CSV, TRAIN_CSV, rel, output_dir
 from common.data_gen import ensure_data
 from common.mongo import get_mongo
 from common.spark import get_spark
@@ -196,10 +196,10 @@ def main() -> dict:
             "",
             "HDFS-STYLE PARTITIONED STORAGE",
             "-" * 78,
-            f"Bus path            : {bus_path}",
+            f"Bus path            : {rel(bus_path)}",
             f"Bus partitions (5)  : {', '.join(bus_dirs)}",
             f"Bus records         : {bus_hdfs_count:,}",
-            f"Train path          : {train_path}",
+            f"Train path          : {rel(train_path)}",
             f"Train partitions (7): {', '.join(train_dirs)}",
             f"Train records       : {train_hdfs_count:,}",
             "",

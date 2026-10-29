@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from pyspark.sql.functions import col
 
-from common.config import BUS_CSV, TRAIN_CSV, output_dir
+from common.config import BUS_CSV, TRAIN_CSV, output_dir, portable_text
 from common.data_gen import ensure_data
 from common.spark import get_spark
 from common.transit import build_unified
@@ -85,7 +85,7 @@ def _plan_text(df) -> dict:
         ("physical", lambda: qe.executedPlan()),
     ):
         try:
-            plans[name] = getter().toString()
+            plans[name] = portable_text(getter().toString())
         except Exception as exc:  # pragma: no cover - defensive across Spark versions
             plans[name] = f"unavailable: {exc}"
     return plans

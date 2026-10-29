@@ -1,14 +1,14 @@
 EXPERIMENT 4 - DATA INGESTION PIPELINE & NOSQL STAGING
 ==============================================================================
-Generated : 2026-10-29T21:28:57
+Generated : 2026-10-29T23:42:22
 MongoDB   : real server (mongodb://127.0.0.1:27017/)
 
 HDFS-STYLE PARTITIONED STORAGE
 ------------------------------------------------------------------------------
-Bus path            : C:\Users\junai\Desktop\BDA_docx\outputs\exp04\hdfs_staging\bus_delays
+Bus path            : outputs/exp04/hdfs_staging/bus_delays
 Bus partitions (5)  : Bronx, Brooklyn, Manhattan, Queens, Staten Island
 Bus records         : 50,000
-Train path          : C:\Users\junai\Desktop\BDA_docx\outputs\exp04\hdfs_staging\train_delays
+Train path          : outputs/exp04/hdfs_staging/train_delays
 Train partitions (7): Bergen County, East of Hudson, Harlem, Hudson Line, New Haven, Pascack Valley, Port Jervis
 Train records       : 50,000
 

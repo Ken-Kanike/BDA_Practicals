@@ -4,20 +4,59 @@ from __future__ import annotations
 
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 _WINUTILS_CANDIDATES = [
     os.environ.get("HADOOP_HOME"),
     str(Path(__file__).resolve().parents[1] / ".hadoop"),
-    r"C:\Users\junai\AppData\Local\Temp\opencode\hadoop",
 ]
 
 _PYTHON_CANDIDATES = [
     os.environ.get("PYSPARK_PYTHON"),
-    r"C:\Users\junai\AppData\Local\Temp\opencode\py311\python.exe",
-    r"C:\Users\junai\AppData\Local\Programs\Python\Python311\python.exe",
     sys.executable,
 ]
+
+
+def _space_free_python_alias() -> str | None:
+    """Alias a spaced interpreter path so Spark workers can launch on Windows.
+
+    Spark starts Python workers through cmd.exe, and a space in the
+    interpreter path (e.g. ``C:\\Program Files\\...``) can fail with an EOF
+    error.  A junction in the OS temp folder (always space-free) is created
+    pointing at the interpreter's parent directory.  Never puts a username or
+    other machine-specific value into the generated reports.
+    """
+    if os.name != "nt":
+        return None
+    exe = Path(sys.executable)
+    if " " not in str(exe):
+        return None
+    alias_dir = Path(tempfile.gettempdir()) / "spark_py_alias"
+    python_alias = alias_dir / exe.name
+    target = exe.parent
+    try:
+        if python_alias.exists():
+            alias_dir.unlink()
+        try:
+            import _winapi
+
+            _winapi.CreateJunction(str(target), str(alias_dir))
+        except ImportError:
+            return None
+        if python_alias.exists():
+            return str(python_alias)
+    except OSError:
+        return None
+    return None
+
+
+def _python_candidates() -> list[str]:
+    return [
+        os.environ.get("PYSPARK_PYTHON"),
+        _space_free_python_alias(),
+        sys.executable,
+    ]
 
 
 def configure_hadoop() -> str | None:
@@ -39,12 +78,10 @@ def configure_hadoop() -> str | None:
 def configure_python() -> str:
     """Select a Python executable whose path does not break Spark workers.
 
-    On Windows the default interpreter may live under ``C:\\Program Files``.
-    Spark launches Python workers through cmd.exe and a space in the path can
-    make the worker fail with an EOF error, so a space-free junction is used
-    when available.
+    Prefers ``PYSPARK_PYTHON`` from the environment, then a space-free alias
+    of the current interpreter, then the interpreter itself.
     """
-    for candidate in _PYTHON_CANDIDATES:
+    for candidate in _python_candidates():
         if candidate and Path(candidate).exists():
             os.environ["PYSPARK_PYTHON"] = candidate
             os.environ["PYSPARK_DRIVER_PYTHON"] = candidate

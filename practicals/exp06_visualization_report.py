@@ -13,7 +13,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib.patches import Rectangle
 
-from common.config import output_dir
+from common.config import output_dir, rel
 from common.data_gen import ensure_data
 from common.spark import get_spark
 from common.transit import build_unified
@@ -267,7 +267,7 @@ def main() -> dict:
             "=" * 78,
             f"Generated : {datetime.now().isoformat(timespec='seconds')}",
             f"Source    : {'Experiment 5 Parquet artifacts' if reused else 'rebuilt from raw CSVs'}",
-            f"Path      : {master_path}",
+            f"Path      : {rel(master_path)}",
             f"Records   : {len(df):,}",
             "",
             "MULTIMODAL PERFORMANCE & RELIABILITY SCORECARD",
