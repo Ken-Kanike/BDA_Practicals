@@ -1,0 +1,74 @@
+EXPERIMENT 10 - MACHINE LEARNING & FINAL SMART CITY SHOWCASE
+==============================================================================
+Generated        : 2026-10-29T22:47:45
+Dataset          : 100,000 trips (50,000 Bus, 50,000 Train)
+Features         : Hour, Month, DayOfWeek, IsWeekend, IsRushHour, Mode, Location, Reason, Passengers
+Train / test     : 75,000 / 25,000 (75/25, stratified)
+Severe threshold : >= 15 minutes (15.5% positive rate)
+
+REGRESSION - PREDICTING DELAY MINUTES
+------------------------------------------------------------------------------
+            model  rmse   mae     r2
+Linear Regression 6.526 4.345 0.0963
+Gradient Boosting 6.532 4.348 0.0949
+    Random Forest 6.599 4.410 0.0760
+Best model       : Linear Regression
+
+CLASSIFICATION - PREDICTING SEVERE DELAY
+------------------------------------------------------------------------------
+Model            : Random Forest (class_weight='balanced')
+Decision threshold: 0.40 (F1-tuned on 20% validation split)
+Accuracy         : 58.06%
+Precision (Severe): 0.2357
+Recall (Severe)   : 0.7586
+F1 (Severe)       : 0.3596
+F1 (Macro)        : 0.5239
+ROC-AUC           : 0.6665
+Predicted Severe  : 12,492 of 25,000 test trips
+Actual Severe     : 3,881 of 25,000 test trips
+
+              precision    recall  f1-score   support
+
+      Normal       0.93      0.55      0.69     21119
+      Severe       0.24      0.76      0.36      3881
+
+    accuracy                           0.58     25000
+   macro avg       0.58      0.65      0.52     25000
+weighted avg       0.82      0.58      0.64     25000
+
+
+TOP RANDOM FOREST REGRESSOR FEATURES
+------------------------------------------------------------------------------
+        feature  importance
+num__Passengers    0.209058
+  cat__Mode_Bus    0.174032
+cat__Mode_Train    0.125669
+      num__Hour    0.122608
+     num__Month    0.121661
+Passenger-count share of regressor importance: 20.9%
+
+TOP CLASSIFIER FEATURES
+------------------------------------------------------------------------------
+        feature  importance
+num__Passengers    0.251255
+cat__Mode_Train    0.137672
+      num__Hour    0.123447
+     num__Month    0.119114
+  cat__Mode_Bus    0.103267
+
+KEY FINDINGS
+------------------------------------------------------------------------------
+1. Regression is honest but limited: the best model explains 9.6% of delay variance.
+2. Passenger count is the strongest single regressor feature, reflecting onboard load exposure.
+3. Class weighting plus an F1-tuned threshold prevents majority-class collapse on a 15.5% positive rate.
+4. Higher recall for severe delays trades precision for fewer missed high-impact incidents.
+5. The live predictor loads the actual fitted pipelines - no hardcoded formulas.
+
+LIMITATIONS
+------------------------------------------------------------------------------
+Low R2 is a genuine feature-set limitation, not an implementation defect. Richer signals
+(live traffic, weather, route historical baselines, incident history) are the next step.
+
+CONCLUSION
+------------------------------------------------------------------------------
+Three regression models and a balanced Random Forest classifier were trained on 75,000 trips and evaluated on 25,000 held-out trips. The best regressor (Linear Regression) achieved RMSE 6.526 and R2 0.096; the classifier achieved AUC 0.6665 with 75.9% recall for severe delays. Models, metrics and evaluation curves feed the final Streamlit Smart City showcase.

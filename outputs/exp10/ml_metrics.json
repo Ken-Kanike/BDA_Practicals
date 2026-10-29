@@ -1,0 +1,86 @@
+{
+  "dataset_rows": 100000,
+  "train_rows": 75000,
+  "test_rows": 25000,
+  "positive_rate": 0.1552,
+  "regression": [
+    {
+      "model": "Linear Regression",
+      "rmse": 6.526,
+      "mae": 4.345,
+      "r2": 0.0963
+    },
+    {
+      "model": "Gradient Boosting",
+      "rmse": 6.532,
+      "mae": 4.348,
+      "r2": 0.0949
+    },
+    {
+      "model": "Random Forest",
+      "rmse": 6.599,
+      "mae": 4.41,
+      "r2": 0.076
+    }
+  ],
+  "best_regressor": "Linear Regression",
+  "classification": {
+    "accuracy": 0.5806,
+    "precision_severe": 0.2357,
+    "recall_severe": 0.7586,
+    "f1_severe": 0.3596,
+    "f1_macro": 0.5239,
+    "roc_auc": 0.6665,
+    "threshold": 0.4,
+    "validation_f1": 0.3626,
+    "predicted_severe": 12492,
+    "actual_severe": 3881,
+    "test_rows": 25000,
+    "positive_rate": 0.1552
+  },
+  "passenger_importance_share": 0.2091,
+  "top_regressor_features": [
+    {
+      "feature": "num__Passengers",
+      "importance": 0.20905828142344254
+    },
+    {
+      "feature": "cat__Mode_Bus",
+      "importance": 0.17403181274007318
+    },
+    {
+      "feature": "cat__Mode_Train",
+      "importance": 0.1256686000229738
+    },
+    {
+      "feature": "num__Hour",
+      "importance": 0.12260816346497096
+    },
+    {
+      "feature": "num__Month",
+      "importance": 0.12166129946040768
+    }
+  ],
+  "top_classifier_features": [
+    {
+      "feature": "num__Passengers",
+      "importance": 0.2512553733698621
+    },
+    {
+      "feature": "cat__Mode_Train",
+      "importance": 0.13767168200560798
+    },
+    {
+      "feature": "num__Hour",
+      "importance": 0.12344694150945267
+    },
+    {
+      "feature": "num__Month",
+      "importance": 0.11911380222462019
+    },
+    {
+      "feature": "cat__Mode_Bus",
+      "importance": 0.10326676805773187
+    }
+  ]
+}

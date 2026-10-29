@@ -132,7 +132,7 @@ def main() -> None:
 
     left, right = st.columns([2, 1])
     with left:
-        st.plotly_chart(_rolling_plot(filtered), use_container_width=True)
+        st.plotly_chart(_rolling_plot(filtered), width="stretch")
     with right:
         status_counts = (
             filtered["alert_status"].value_counts().reindex(["CRITICAL", "WARNING", "NORMAL"]).fillna(0)
@@ -148,7 +148,7 @@ def main() -> None:
         donut.update_layout(
             title="Severity mix", height=380, margin=dict(l=10, r=10, t=60, b=10)
         )
-        st.plotly_chart(donut, use_container_width=True)
+        st.plotly_chart(donut, width="stretch")
 
     left, right = st.columns([3, 2])
     with left:
@@ -175,7 +175,7 @@ def main() -> None:
             height=430,
             margin=dict(l=10, r=10, t=60, b=10),
         )
-        st.plotly_chart(bar, use_container_width=True)
+        st.plotly_chart(bar, width="stretch")
     with right:
         st.subheader("Automated incident feed")
         alerts = filtered[filtered["alert_status"] != "NORMAL"].sort_values(

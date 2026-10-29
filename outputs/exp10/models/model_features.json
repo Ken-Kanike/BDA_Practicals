@@ -1,0 +1,65 @@
+{
+  "features": [
+    "Hour",
+    "Month",
+    "DayOfWeek",
+    "IsWeekend",
+    "IsRushHour",
+    "Mode",
+    "Location",
+    "Reason",
+    "Passengers"
+  ],
+  "categorical": [
+    "Mode",
+    "Location",
+    "Reason"
+  ],
+  "numeric": [
+    "Hour",
+    "Month",
+    "DayOfWeek",
+    "IsWeekend",
+    "IsRushHour",
+    "Passengers"
+  ],
+  "categories": {
+    "Mode": [
+      "Bus",
+      "Train"
+    ],
+    "Location": [
+      "Bergen County",
+      "Bronx",
+      "Brooklyn",
+      "East of Hudson",
+      "Harlem",
+      "Hudson Line",
+      "Manhattan",
+      "New Haven",
+      "Pascack Valley",
+      "Port Jervis",
+      "Queens",
+      "Staten Island"
+    ],
+    "Reason": [
+      "Accident",
+      "Congestion",
+      "Door Fault",
+      "Driver Shortage",
+      "Heavy Traffic",
+      "Late Return From Route",
+      "Mechanical Failure",
+      "Mechanical Problem",
+      "Other",
+      "Overhead Line Issue",
+      "Road Construction",
+      "Signal Problem",
+      "Track Work",
+      "Weather Conditions"
+    ]
+  },
+  "best_regressor": "Linear Regression",
+  "severe_threshold_minutes": 15.0,
+  "classifier_decision_threshold": 0.4
+}

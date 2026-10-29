@@ -1,0 +1,35 @@
+feature,importance
+num__Passengers,0.20905828142344254
+cat__Mode_Bus,0.17403181274007318
+cat__Mode_Train,0.1256686000229738
+num__Hour,0.12260816346497096
+num__Month,0.12166129946040768
+num__DayOfWeek,0.0865794588375625
+cat__Location_Brooklyn,0.014997516660428485
+cat__Location_Queens,0.0146981844324644
+cat__Location_Manhattan,0.014313160545875779
+num__IsRushHour,0.0106690293367544
+cat__Reason_Heavy Traffic,0.009227033711644458
+cat__Reason_Accident,0.008353303709379728
+cat__Reason_Mechanical Problem,0.008106311707977243
+num__IsWeekend,0.00798147935883427
+cat__Reason_Signal Problem,0.0071953305701217395
+cat__Location_Bronx,0.006641195298713636
+cat__Reason_Other,0.00617645051242227
+cat__Reason_Weather Conditions,0.006056415834169165
+cat__Location_Staten Island,0.004969495399013374
+cat__Reason_Road Construction,0.004599911306815234
+cat__Reason_Late Return From Route,0.0040513940472329535
+cat__Location_New Haven,0.004041094201046802
+cat__Reason_Driver Shortage,0.0037213697131600267
+cat__Location_East of Hudson,0.003237387162640566
+cat__Location_Harlem,0.0030348569817544315
+cat__Location_Hudson Line,0.0027823127977712305
+cat__Location_Port Jervis,0.002524533236260978
+cat__Location_Pascack Valley,0.0024917439969109746
+cat__Reason_Mechanical Failure,0.002110821014358371
+cat__Location_Bergen County,0.0020880104596785083
+cat__Reason_Track Work,0.0017985458569175843
+cat__Reason_Congestion,0.0016954225716347125
+cat__Reason_Overhead Line Issue,0.0015600438825421955
+cat__Reason_Door Fault,0.0012700297440458202
