@@ -14,7 +14,11 @@ outputs/**/hdfs_staging/
 outputs/**/streaming_input/
 outputs/**/checkpoint/
 outputs/**/checkpoints/
-outputs/**/*.parquet/
+outputs/**/*.parquet
+outputs/**/*.parquet.*
+outputs/**/*.crc
+outputs/**/_SUCCESS
+outputs/**/*.snappy.parquet
 outputs/**/spark-warehouse/
 outputs/**/derby.log
 outputs/**/metastore_db/
