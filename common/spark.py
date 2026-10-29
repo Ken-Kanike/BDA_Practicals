@@ -12,6 +12,12 @@ _WINUTILS_CANDIDATES = [
     r"C:\Users\junai\AppData\Local\Temp\opencode\hadoop",
 ]
 
+_PYTHON_CANDIDATES = [
+    os.environ.get("PYSPARK_PYTHON"),
+    r"C:\Users\junai\AppData\Local\Temp\opencode\py312\python.exe",
+    sys.executable,
+]
+
 
 def configure_hadoop() -> str | None:
     """Point Spark at winutils.exe when running on Windows without HADOOP_HOME."""
@@ -29,6 +35,22 @@ def configure_hadoop() -> str | None:
     return None
 
 
+def configure_python() -> str:
+    """Select a Python executable whose path does not break Spark workers.
+
+    On Windows the default interpreter may live under ``C:\\Program Files``.
+    Spark launches Python workers through cmd.exe and a space in the path can
+    make the worker fail with an EOF error, so a space-free junction is used
+    when available.
+    """
+    for candidate in _PYTHON_CANDIDATES:
+        if candidate and Path(candidate).exists():
+            os.environ["PYSPARK_PYTHON"] = candidate
+            os.environ["PYSPARK_DRIVER_PYTHON"] = candidate
+            return candidate
+    return sys.executable
+
+
 def get_spark(
     app_name: str,
     master: str = "local[*]",
@@ -37,8 +59,7 @@ def get_spark(
 ):
     """Create a local SparkSession configured for these practicals."""
     configure_hadoop()
-    os.environ.setdefault("PYSPARK_PYTHON", sys.executable)
-    os.environ.setdefault("PYSPARK_DRIVER_PYTHON", sys.executable)
+    python_exe = configure_python()
     os.environ.setdefault("SPARK_LOCAL_IP", "127.0.0.1")
 
     from pyspark.sql import SparkSession
@@ -52,6 +73,9 @@ def get_spark(
         .config("spark.driver.host", "127.0.0.1")
         .config("spark.driver.bindAddress", "127.0.0.1")
         .config("spark.sql.adaptive.enabled", "true")
+        .config("spark.pyspark.python", python_exe)
+        .config("spark.pyspark.driver.python", python_exe)
+        .config("spark.python.worker.reuse", "false")
     )
     if warehouse:
         Path(warehouse).mkdir(parents=True, exist_ok=True)
